@@ -1,0 +1,46 @@
+table {
+    font-size: 13px;
+}
+
+table td {
+    position: relative;
+    min-width: 300px;
+    /*padding: 0px !important;*/
+    /*vertical-align: middle !important;*/
+    white-space:nowrap;
+}
+
+table tr {
+    /*height: 48px !important;*/
+}
+
+table td.edit {
+    padding: 0 10px !important;
+}
+
+table td input {
+    /*border: 1px solid #ccc!important;*/
+    height: 43px;
+    width: 100%;
+}
+
+div.runHandler {
+    display: none;
+    content: '';
+    position: absolute;
+    right: 25px;
+    top: 12px;
+    background: dodgerblue;
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    transition: all .2s;
+}
+
+div.runHandler.show {
+    display: block;
+}
+
+div.runHandler:hover {
+    background: lightskyblue;
+}
