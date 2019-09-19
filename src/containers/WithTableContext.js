@@ -1,10 +1,10 @@
 import React from 'react';
-import { DataGridContext } from 'containers/DataGrid';
+import { TableContext } from 'components/Table/TableContainer';
 
 const WithTableContext = Component => props => (
-  <DataGridContext.Consumer>
+  <TableContext.Consumer>
     {consumer => <Component {...consumer} {...props}/>}
-  </DataGridContext.Consumer>
+  </TableContext.Consumer>
 );
 
 export default WithTableContext;

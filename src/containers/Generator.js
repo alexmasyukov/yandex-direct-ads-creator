@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import DataGrid from "containers/DataGrid"
-import * as Util from 'utils/util'
+import * as dataGridHandlers from 'utils/dataGridHandlers'
 import { generateSimpleRows } from 'data/simpleData'
+import { highlightMaxLength } from "utils/dataGridHandlers";
 
 const columns = [
   { key: "c1", name: "One", editable: true },
@@ -25,8 +26,22 @@ const columns = [
 
 class Generator extends Component {
   state = {
-    maxTitleLength: 33
+    maxTitleLength: 33,
+    endWordsToDelete: ['производитель']
   }
+
+  get displayValueHandlers() {
+    return {
+      c1: dataGridHandlers.highlightMaxLength(this.state.maxTitleLength)
+    }
+  }
+
+  get valueHandlers() {
+    return {
+      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.endWordsToDelete)
+    }
+  }
+
 
   handleInputChange = (e, stateKey) => {
     this.setState({
@@ -34,26 +49,10 @@ class Generator extends Component {
     })
   }
 
-  componentDidMount() {
-    // const test = generateSimpleRows(10);
-    //
-    //
-    // console.log(Util.normalized(test));
-
-  }
-
   render() {
-    const valueHandlers = {
-      // c1: Util.highlightMaxLength(this.state.maxTitleLength)
-    }
-
-    const displayValueHandlers = {
-      c1: Util.highlightMaxLength(this.state.maxTitleLength)
-    }
-
     return (
       <div>
-        <p>{Util.highlightMaxLength(this.state.maxTitleLength)('посредники таобао дешевая доставка в россию')}</p>
+        <p>{dataGridHandlers.highlightMaxLength(this.state.maxTitleLength)('посредники таобао дешевая доставка в россию')}</p>
 
         <input
           type="number"
@@ -63,9 +62,9 @@ class Generator extends Component {
 
         <DataGrid
           columns={columns}
-          rows={generateSimpleRows(1000)}
-          valueHandlers={valueHandlers}
-          displayValueHandlers={displayValueHandlers}
+          rows={generateSimpleRows(20)}
+          valueHandlers={this.valueHandlers}
+          displayValueHandlers={this.displayValueHandlers}
         />
       </div>
     );

@@ -1,40 +1,58 @@
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent } from 'react';
 import Edit from "components/Table/UI/Edit";
+import WithTableContext from 'containers/WithTableContext'
+
+// displayValueHandlers
 
 class Cell extends PureComponent {
   state = {
     isEdit: false
   }
 
-  handleCellClick = () => {
+  handleCellClick = (event) => {
+    event.preventDefault();
     this.setState({
       isEdit: true
     })
   }
 
   handleEnter = (value, rowIndex, columnKey) => {
-    console.log('handleEnter:', value, rowIndex, columnKey);
+    // console.log('handleEnter:', value, rowIndex, columnKey);
     this.setState({
       isEdit: false
     })
 
     // Обновляем ячейку только тогда, когда данные в ней изменились
     if (this.props.value !== value) {
-      this.props.onEditCellChange(value, rowIndex, columnKey)
+      const { onEditCellChange } = this.props
+      onEditCellChange(value, rowIndex, columnKey)
     }
   }
 
   render() {
     const {
       value,
-      displayValue,
+      prevCellValue,
       rowIndex,
-      columnKey
+      columnKey,
+      onRunHandlerClick,
+      valueHandlers,
+      displayValueHandlers
     } = this.props
 
+    const cls = []
+    this.state.isEdit && cls.push('edit')
+
+    // display value handler run
+    let displayValue = value
+    if (displayValueHandlers[columnKey]) {
+      const handler = displayValueHandlers[columnKey]
+      displayValue = handler(value, prevCellValue)
+    }
 
     return (
       <td
+        className={cls.join(' ')}
         onClick={this.handleCellClick}
       >
         {
@@ -45,40 +63,19 @@ class Cell extends PureComponent {
               rowIndex={rowIndex}
               columnKey={columnKey}
             />
-            : displayValue
+            :
+            <>
+              {displayValue}
+              {
+                valueHandlers[columnKey] && <div
+                  onClick={(event) => onRunHandlerClick(event, value, rowIndex, columnKey, prevCellValue)}
+                >&nbsp;</div>
+              }
+            </>
         }
       </td>
     );
   }
 }
 
-
-const Cell2 = ({
-                 value,
-                 displayValue,
-                 rowIndex,
-                 columnKey,
-                 onCellClick,
-                 onRunHandlerClick
-               }) => {
-  const [visible, setVisible] = useState('')
-  return (
-    <td
-      onClick={onCellClick.bind(null, rowIndex, columnKey)}
-      onMouseOver={() => {
-        setVisible('show')
-      }}
-      onMouseOut={() => {
-        setVisible('')
-      }}
-    >
-      {displayValue}
-      <div
-        className={`runHandler ${visible}`}
-        onClick={(e) => onRunHandlerClick(e, value, rowIndex, columnKey)}
-      >&nbsp;</div>
-    </td>
-  )
-}
-
-export default Cell
+export default WithTableContext(Cell)

@@ -24,23 +24,26 @@ table td input {
     width: 100%;
 }
 
-div.runHandler {
+td div {
     display: none;
     content: '';
     position: absolute;
-    right: 25px;
-    top: 12px;
+    right: 15px;
+    top: 8px;
     background: dodgerblue;
-    height: 20px;
-    width: 20px;
-    border-radius: 5px;
-    transition: all .2s;
+    height: 27px;
+    width: 27px;
+    border-radius: 50%;
+    transition: all .3s;
+
 }
 
-div.runHandler.show {
+td:hover > div {
     display: block;
 }
 
-div.runHandler:hover {
-    background: lightskyblue;
+table td div:hover {
+    cursor: pointer;
+    background: yellowgreen;
 }
+
