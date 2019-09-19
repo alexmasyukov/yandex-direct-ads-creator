@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import DataGrid from "containers/DataGrid"
 import * as dataGridHandlers from 'utils/dataGridHandlers'
 import { generateSimpleRows } from 'data/simpleData'
-import { highlightMaxLength } from "utils/dataGridHandlers";
 
 const columns = [
   { key: "c1", name: "One", editable: true },
@@ -26,13 +25,31 @@ const columns = [
 
 class Generator extends Component {
   state = {
-    maxTitleLength: 33,
-    endWordsToDelete: ['производитель']
+    maxTitleLength: 20,
+    endWordsToDelete: [
+      'в',
+      'на',
+      'из',
+      'в интернет',
+      'для',
+      'ru',
+      'ру',
+      'с',
+      'по',
+      'и',
+      'м',
+      'интернет',
+      'в интернете',
+      'интернете',
+      'от',
+      'россия'
+    ]
   }
 
   get displayValueHandlers() {
     return {
-      c1: dataGridHandlers.highlightMaxLength(this.state.maxTitleLength)
+      c1: dataGridHandlers.highlightMaxLength(this.state.maxTitleLength),
+      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.endWordsToDelete)
     }
   }
 
@@ -43,9 +60,9 @@ class Generator extends Component {
   }
 
 
-  handleInputChange = (e, stateKey) => {
+  handleInputChange = (stateKey, value) => {
     this.setState({
-      [stateKey]: e.target.value
+      [stateKey]: value
     })
   }
 
@@ -54,10 +71,19 @@ class Generator extends Component {
       <div>
         <p>{dataGridHandlers.highlightMaxLength(this.state.maxTitleLength)('посредники таобао дешевая доставка в россию')}</p>
 
+        <textarea
+          cols="30"
+          rows="10"
+          value={this.state.endWordsToDelete.join('\n')}
+          onChange={e =>
+            this.handleInputChange('endWordsToDelete', e.target.value.split('\n'))}
+        />
+
         <input
           type="number"
           value={this.state.maxTitleLength}
-          onChange={(e) => this.handleInputChange(e, 'maxTitleLength')}
+          onChange={e =>
+            this.handleInputChange('maxTitleLength', e.target.value)}
         />
 
         <DataGrid

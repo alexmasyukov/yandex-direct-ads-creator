@@ -4,7 +4,7 @@ table {
 
 table td {
     position: relative;
-    min-width: 300px;
+    min-width: 370px;
     /*padding: 0px !important;*/
     /*vertical-align: middle !important;*/
     white-space:nowrap;
@@ -12,6 +12,10 @@ table td {
 
 table tr {
     /*height: 48px !important;*/
+}
+
+table tr td:first-of-type {
+    min-width: 40px!important;
 }
 
 table td.edit {

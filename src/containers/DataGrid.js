@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import TableContainer from "components/Table/TableContainer";
 import Loading from "components/Loading"
 import { normalized } from "utils/util"

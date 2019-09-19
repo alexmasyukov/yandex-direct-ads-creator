@@ -19,40 +19,12 @@ class TableContainer extends Component {
         [columnKey]: newState
       }
     })
-
-
-
-    // if (this.props.displayValueHandlers[columnKey]) {
-    //   const handler = this.props.displayValueHandlers[columnKey]
-    //
-    //   let prevCellValue = ''
-    //   let [columnKeyName, columnIndex] = columnKey.split('')
-    //   console.log(columnKeyName, columnIndex);
-    //   if (columnIndex > 1) {
-    //     const prevColumnKey = columnKeyName + String(columnIndex - 1)
-    //     prevCellValue = this.state[prevColumnKey][rowIndex]
-    //     console.log(prevCellValue);
-    //   }
-    //   const newValue = handler(value, prevCellValue)
-    //   console.log(newValue);
-    //
-    //   this.setState(prevState => {
-    //     const newState = prevState[columnKey]
-    //     newState[rowIndex] = newValue
-    //
-    //     return {
-    //       [columnKey]: newState
-    //     }
-    //   })
-    // }
-
     event.stopPropagation()
   }
 
 
   handleEditCellChange = (value, rowIndex, columnKey) => {
-    console.log('handleEditCellChange Table: ', value, rowIndex, columnKey)
-
+    // console.log('handleEditCellChange Table: ', value, rowIndex, columnKey)
     this.setState(prevState => {
       const newState = prevState[columnKey]
       newState[rowIndex] = value
@@ -65,6 +37,7 @@ class TableContainer extends Component {
 
 
   prepareRows = () => {
+    // Normalization rows
     const keys = Object.keys(this.state)
     const firsKey = keys[0]
 
