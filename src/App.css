@@ -4,7 +4,7 @@ table {
 
 table td {
     position: relative;
-    min-width: 370px;
+    min-width: 340px;
     /*padding: 0px !important;*/
     /*vertical-align: middle !important;*/
     white-space:nowrap;
@@ -51,3 +51,17 @@ table td div:hover {
     background: yellowgreen;
 }
 
+.menu {
+    padding: 0;
+    margin: 0;
+}
+.menu li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.menu li a.active {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}

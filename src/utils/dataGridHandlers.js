@@ -5,7 +5,7 @@ import React from "react"
 // str.repeat(times) – повторяет строку str times раз
 const initMaxLength = 33
 
-export const deleteNeedless = (maxLength = initMaxLength, endsWords = []) =>
+export const deleteNeedless = (maxLength = initMaxLength, needless = []) =>
   (value = '', prevCellValue = '') => {
     if (prevCellValue.length < maxLength) return prevCellValue
 
@@ -17,7 +17,7 @@ export const deleteNeedless = (maxLength = initMaxLength, endsWords = []) =>
     // console.log(newValue, '*' + prevCellValue[newValue.length] + '*', newValue.lastIndexOf(' '))
 
     const lastWord = newValue.split(' ').pop()
-    for (const word of endsWords) {
+    for (const word of needless) {
       if (word.trim() === lastWord) {
         newValue = newValue.slice(0, newValue.lastIndexOf(' '))
         return newValue
@@ -25,6 +25,22 @@ export const deleteNeedless = (maxLength = initMaxLength, endsWords = []) =>
     }
 
     return newValue
+  }
+
+
+export const addNeedless = (maxLength = initMaxLength, needless = []) =>
+  (value = '', prevCellValue = '') => {
+    const length = prevCellValue.length
+    // if (length >= maxLength) return prevCellValue
+
+    console.log(prevCellValue);
+    for (const word of needless) {
+      if (word.length + length <= maxLength) {
+        prevCellValue += word
+      }
+    }
+
+    return prevCellValue
   }
 
 

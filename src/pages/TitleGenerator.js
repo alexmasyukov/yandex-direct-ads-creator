@@ -23,10 +23,10 @@ const columns = [
 //   { id: 2, c1: "Task 3", c2: 40, c3: 'f' }
 // ]
 
-class Generator extends Component {
+class TitleGenerator extends Component {
   state = {
     maxTitleLength: 20,
-    endWordsToDelete: [
+    deleteNeedless: [
       'в',
       'на',
       'из',
@@ -43,19 +43,25 @@ class Generator extends Component {
       'интернете',
       'от',
       'россия'
+    ],
+    addNeedless: [
+      '! Недорого!',
+      '! Дешево!',
+      '!'
     ]
   }
 
   get displayValueHandlers() {
     return {
       c1: dataGridHandlers.highlightMaxLength(this.state.maxTitleLength),
-      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.endWordsToDelete)
+      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.deleteNeedless),
+      c3: dataGridHandlers.addNeedless(this.state.maxTitleLength, this.state.addNeedless)
     }
   }
 
   get valueHandlers() {
     return {
-      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.endWordsToDelete)
+      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.deleteNeedless)
     }
   }
 
@@ -71,20 +77,29 @@ class Generator extends Component {
       <div>
         <p>{dataGridHandlers.highlightMaxLength(this.state.maxTitleLength)('посредники таобао дешевая доставка в россию')}</p>
 
-        <textarea
-          cols="30"
-          rows="10"
-          value={this.state.endWordsToDelete.join('\n')}
-          onChange={e =>
-            this.handleInputChange('endWordsToDelete', e.target.value.split('\n'))}
-        />
-
         <input
           type="number"
           value={this.state.maxTitleLength}
           onChange={e =>
             this.handleInputChange('maxTitleLength', e.target.value)}
         />
+
+        <textarea
+          cols="30"
+          rows="10"
+          value={this.state.deleteNeedless.join('\n')}
+          onChange={e =>
+            this.handleInputChange('deleteNeedless', e.target.value.split('\n'))}
+        />
+
+        <textarea
+          cols="30"
+          rows="10"
+          value={this.state.addNeedless.join('\n')}
+          onChange={e =>
+            this.handleInputChange('addNeedless', e.target.value.split('\n'))}
+        />
+
 
         <DataGrid
           columns={columns}
@@ -97,4 +112,4 @@ class Generator extends Component {
   }
 }
 
-export default Generator;
+export default TitleGenerator;
