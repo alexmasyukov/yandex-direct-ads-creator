@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap"
-import AdDescription from "components/adsSettingsForm/AdDescription";
-import AdFastLink from "components/adsSettingsForm/AdFastLink";
-
+import AdDescription from "components/adsSettingsForm/AdDescription"
+import AdFastLink from "components/adsSettingsForm/AdFastLink"
+import { companyTableTitles } from "constants/companyTableTitles"
 
 // import { CSVLink, CSVDownload } from "react-csv";
 //
@@ -42,7 +42,8 @@ class AdsGenerator extends Component {
         description: '',
         url: 'https://klumba.store/delivery'
       }
-    ]
+    ],
+    csv: ''
   }
 
   handleSecondTitleChange = () => {
@@ -107,146 +108,188 @@ class AdsGenerator extends Component {
     }))
   }
 
+  handleCreateAds = () => {
+
+  }
+
+
+  componentDidMount() {
+    const data = []
+    data.push(companyTableTitles)
+    data.push([
+      1, 2, 3, 4
+    ])
+    data.push([
+      1, 2, 3, 4
+    ])
+
+    const renderRow = (row) => row.join('\t') + `\r`
+
+    let csv = ''
+    data.forEach(row => {
+      csv += renderRow(row)
+    })
+
+    // const a = data.map(row => console.log(renderRow(row)))
+    this.setState({
+      csv: csv
+    })
+  }
+
 
   render() {
     const { secondTitle, descriptions, linkUrl, linkVisible, fastLinks } = this.state
 
     return (
-      <Container>
-        {/*fluid={true}*/}
-        {/*<h5 className="pt-3 pb-0">*/}
+      <>
+        <Container>
+          {/*fluid={true}*/}
+          {/*<h5 className="pt-3 pb-0">*/}
           {/*Генерация рекламной компании*/}
-        {/*</h5>*/}
+          {/*</h5>*/}
 
-        <Row className="pt-3">
-          <Col className="pr-1">
+          <Row className="pt-3">
+            <Col className="pr-1">
 
-            <Card>
-              <Card.Header>Объявление</Card.Header>
-              <Card.Body>
+              <Card>
+                <Card.Header>Объявление</Card.Header>
+                <Card.Body>
 
-                <Row>
-                  <Col md={12}>
-                    <Form.Label>Второй заголовок</Form.Label>
-                    <Form.Check
-                      type="checkbox"
-                      id={`check-api-checkbox`}
-                      checked={secondTitle.manually}
-                      onChange={this.handleSecondTitleChange}
-                      label={`Использовать ручной второй заголовок`}
-                      className="pb-3"
-                      custom
-                    />
-                  </Col>
-                  {
-                    secondTitle.manually &&
-                    <Col>
-                      <Form.Group>
-                        <Form.Control type="text" placeholder="" size="sm"/>
-                        <Form.Text className="text-muted">
-                          Максимум 30 символов
-                        </Form.Text>
-                      </Form.Group>
+                  <Row>
+                    <Col md={12}>
+                      <Form.Label>Второй заголовок</Form.Label>
+                      <Form.Check
+                        type="checkbox"
+                        id={`check-api-checkbox`}
+                        checked={secondTitle.manually}
+                        onChange={this.handleSecondTitleChange}
+                        label={`Использовать ручной второй заголовок`}
+                        className="pb-3"
+                        custom
+                      />
                     </Col>
+                    {
+                      secondTitle.manually &&
+                      <Col>
+                        <Form.Group>
+                          <Form.Control type="text" placeholder="" size="sm"/>
+                          <Form.Text className="text-muted">
+                            Максимум 30 символов
+                          </Form.Text>
+                        </Form.Group>
+                      </Col>
+                    }
+                  </Row>
+
+                  {
+                    descriptions.map((description, i) =>
+                      <AdDescription
+                        key={i}
+                        index={i}
+                        description={description}
+                        onChange={this.handleDescriptionChange}
+                        onDelete={this.handleDescriptionDelete}
+                      />
+                    )
                   }
-                </Row>
 
-                {
-                  descriptions.map((description, i) =>
-                    <AdDescription
-                      key={i}
-                      index={i}
-                      description={description}
-                      onChange={this.handleDescriptionChange}
-                      onDelete={this.handleDescriptionDelete}
-                    />
-                  )
-                }
-
-                <Form.Group>
-                  <Button
-                    variant="outline-success"
-                    size="sm"
-                    onClick={this.handleAddDescription}
-                  >
-                    + Добавить описание
-                  </Button>
-                </Form.Group>
-
-                <Row>
-                  <Col className="pr-1">
-                    <Form.Group>
-                      <Form.Label>Ссылка</Form.Label>
-                      <Form.Control
-                        type="text"
-                        size="sm"
-                        value={linkUrl}
-                        onChange={e => this.handleInputTextChange({ linkUrl: e.target.value })}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col className="pl-1">
-                    <Form.Group>
-                      <Form.Label>Отображаемая ссылка</Form.Label>
-                      <Form.Control
-                        type="text"
-                        size="sm"
-                        value={linkVisible}
-                        onChange={e => this.handleInputTextChange({ linkVisible: e.target.value })}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-              </Card.Body>
-            </Card>
-
-          </Col>
-
-          <Col className="pl-2">
-
-            <Card>
-              <Card.Header>Быстрые ссылки</Card.Header>
-              <Card.Body>
-                {
-                  fastLinks.map((link, i) =>
-                    <AdFastLink
-                      key={i}
-                      index={i}
-                      onChange={this.handleFastLinkChange}
-                      title={link.title}
-                      url={link.url}
-                    />
-                  )
-                }
-
-                {
-                  fastLinks.length < 4 &&
                   <Form.Group>
                     <Button
                       variant="outline-success"
                       size="sm"
-                      onClick={this.handleAddFastLink}
+                      onClick={this.handleAddDescription}
                     >
-                      + Добавить быструю ссылку
+                      + Добавить описание
                     </Button>
                   </Form.Group>
-                }
 
-              </Card.Body>
-            </Card>
+                  <Row>
+                    <Col className="pr-1">
+                      <Form.Group>
+                        <Form.Label>Ссылка</Form.Label>
+                        <Form.Control
+                          type="text"
+                          size="sm"
+                          value={linkUrl}
+                          onChange={e => this.handleInputTextChange({ linkUrl: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col className="pl-1">
+                      <Form.Group>
+                        <Form.Label>Отображаемая ссылка</Form.Label>
+                        <Form.Control
+                          type="text"
+                          size="sm"
+                          value={linkVisible}
+                          onChange={e => this.handleInputTextChange({ linkVisible: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-          </Col>
-        </Row>
+                </Card.Body>
+              </Card>
 
-        <Row className="pt-4">
-          <Col>
-            <Button variant="outline-success">Сгенерировать объявления</Button>
-          </Col>
-        </Row>
+            </Col>
+
+            <Col className="pl-2">
+
+              <Card>
+                <Card.Header>Быстрые ссылки</Card.Header>
+                <Card.Body>
+                  {
+                    fastLinks.map((link, i) =>
+                      <AdFastLink
+                        key={i}
+                        index={i}
+                        onChange={this.handleFastLinkChange}
+                        title={link.title}
+                        url={link.url}
+                      />
+                    )
+                  }
+
+                  {
+                    fastLinks.length < 4 &&
+                    <Form.Group>
+                      <Button
+                        variant="outline-success"
+                        size="sm"
+                        onClick={this.handleAddFastLink}
+                      >
+                        + Добавить быструю ссылку
+                      </Button>
+                    </Form.Group>
+                  }
+
+                </Card.Body>
+              </Card>
+
+            </Col>
+          </Row>
+
+          <Row className="pt-4">
+            <Col>
+              <Button variant="outline-success" onClick={this.handleCreateAds}>Сгенерировать объявления</Button>
+            </Col>
+          </Row>
 
 
-      </Container>
+        </Container>
+        <Container fluid={true} className="pt-5">
+          <Form.Control
+            as="textarea"
+            rows="3"
+            onChange={(e) => e.preventDefault()}
+            onClick={(e) => {
+              e.target.select()
+              document.execCommand("copy")
+            }}
+            value={this.state.csv}
+          />
+        </Container>
+      </>
     )
   }
 }

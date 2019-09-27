@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap'
 import { Link } from "react-router-dom";
-import { links } from "consts/menu";
+import { links } from "constants/menu";
 
 const MenuNavbar = () => {
   return (
