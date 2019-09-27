@@ -3,25 +3,13 @@ import { Container, Form, Button, Card, Row, Col } from "react-bootstrap"
 import AdDescription from "components/adsSettingsForm/AdDescription"
 import AdFastLink from "components/adsSettingsForm/AdFastLink"
 import { companyTableTitles } from "constants/companyTableTitles"
-
-// import { CSVLink, CSVDownload } from "react-csv";
-//
-// const csvData = [
-//   ["firstname", "lastname", "email"],
-//   ["Ahmed", "Tomi", "ah@smthing.co.com"],
-//   ["Raed", "Labes", "rl@smthing.co.com"],
-//   ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-// ];
-//
-// <CSVLink data={csvData} separator={"  "}>
-//   Download me
-// </CSVLink>
-// // or
-// <CSVDownload data={csvData} target="_blank"/>
+import { exampleKeywords } from "constants/exampleKeywords";
 
 
 class AdsGenerator extends Component {
   state = {
+    companyName: 'Тестовая_Поиск',
+    region: 'Забайкальский край',
     secondTitle: {
       manually: true,
       title: 'второй заголовок'
@@ -108,20 +96,56 @@ class AdsGenerator extends Component {
     }))
   }
 
-  handleCreateAds = () => {
-
+  handleFastLinkDelete = (index) => {
+    this.setState(prevState => {
+      const fastLinks = [...prevState.fastLinks]
+      fastLinks.splice(index, 1)
+      return {
+        fastLinks
+      }
+    })
   }
 
-
-  componentDidMount() {
+  handleCreateAds = () => {
     const data = []
     data.push(companyTableTitles)
-    data.push([
-      1, 2, 3, 4
-    ])
-    data.push([
-      1, 2, 3, 4
-    ])
+
+    const groupName = (keyword, index) => keyword
+        .toLowerCase()
+        .replace(' ', '_')
+        .replace(' ', '_')
+        .replace(' ', '_')
+        .replace('\t', '_')
+        .replace('\r', '_')
+        .replace('\n', '_')
+      + '_'
+      + index
+
+
+    exampleKeywords.map((keyword, i) => {
+      data.push([
+        '-',
+        'Текстово-графическое',
+        '-',
+        groupName(keyword, i), // Название группы
+        i,
+        'Текстово-графическая',
+        this.state.companyName,
+        'RUB',
+        keyword,
+        'загол1',
+        'загол2',
+        'текст',
+        this.state.linkUrl,
+        this.state.linkVisible,
+        this.state.region,
+        5,
+        1
+        // '\t',
+        // '\t',
+        // '\t',
+      ])
+    })
 
     const renderRow = (row) => row.join('\t') + `\r`
 
@@ -130,10 +154,34 @@ class AdsGenerator extends Component {
       csv += renderRow(row)
     })
 
-    // const a = data.map(row => console.log(renderRow(row)))
     this.setState({
       csv: csv
     })
+  }
+
+
+  componentDidMount() {
+    this.handleCreateAds()
+    // const data = []
+    // data.push(companyTableTitles)
+    // data.push([
+    //   1, 2, 3, 4
+    // ])
+    // data.push([
+    //   1, 2, 3, 4
+    // ])
+    //
+    //
+    //
+    // let csv = ''
+    // data.forEach(row => {
+    //   csv += renderRow(row)
+    // })
+    //
+    // // const a = data.map(row => console.log(renderRow(row)))
+    // this.setState({
+    //   csv: csv
+    // })
   }
 
 
@@ -147,6 +195,46 @@ class AdsGenerator extends Component {
           {/*<h5 className="pt-3 pb-0">*/}
           {/*Генерация рекламной компании*/}
           {/*</h5>*/}
+
+          <Row className="pt-3">
+            <Col className="pr-1">
+              <Card>
+                <Card.Header>Компания</Card.Header>
+                <Card.Body>
+
+                  <Row>
+                    <Col md={6} className="pr-1">
+                      <Form.Group>
+                        <Form.Label>Название компании</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={this.state.companyName}
+                          onChange={e => this.handleInputTextChange({ companyName: e.target.value })}
+                          size="sm"
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6} className="pl-1">
+                      <Form.Group>
+                        <Form.Label>Регион</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={this.state.region}
+                          onChange={e => this.handleInputTextChange({ region: e.target.value })}
+                          size="sm"
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              sad
+            </Col>
+          </Row>
 
           <Row className="pt-3">
             <Col className="pr-1">
@@ -244,6 +332,7 @@ class AdsGenerator extends Component {
                         key={i}
                         index={i}
                         onChange={this.handleFastLinkChange}
+                        onDelete={this.handleFastLinkDelete}
                         title={link.title}
                         url={link.url}
                       />
