@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
-import MenuNavbar from "components/Menu/MenuNavbar";
+import MenuNavbar from "components/Menu/MenuNavbar"
 
 
 class MenuLayout extends Component {
@@ -14,4 +14,4 @@ class MenuLayout extends Component {
   }
 }
 
-export default MenuLayout;
+export default MenuLayout

@@ -1,3 +1,7 @@
+body {
+    font-size: 14px;
+}
+
 table {
     font-size: 13px;
 }
@@ -64,4 +68,21 @@ table td div:hover {
     font-weight: bold;
     text-decoration: none;
     color: black;
+}
+
+button.delete {
+    font-size: 11px;
+    padding: 2px 5px;
+}
+
+input[type=checkbox] {
+    user-select: none;
+}
+
+label {
+    user-select: none;
+}
+
+small.invalid-feedback {
+    display: block !important;
 }

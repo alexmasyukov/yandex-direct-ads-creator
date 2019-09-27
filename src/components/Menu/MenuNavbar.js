@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap'
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { links } from "consts/menu";
 
 const MenuNavbar = () => {
@@ -9,22 +9,27 @@ const MenuNavbar = () => {
       <Navbar.Brand href="#">
         Creator
       </Navbar.Brand>
-      <Nav className="mr-auto">
+      <Nav
+        className="mr-auto">
         {
           links.map((link, i) =>
-            <NavLink
+            <Link
               key={i}
               to={link.to}
-              exact={link.exact}
-              activeClassName={"active"}
+              // exact={link.exact}
+              // activeClassName={"active"}
             >
-              <Nav.Link href={link.to}>{link.label}</Nav.Link>
-            </NavLink>
+
+              {/*<Nav.Link href={link.to}>*/}
+                {link.label}
+              {/*</Nav.Link>*/}
+            </Link>
           )
         }
       </Nav>
     </Navbar>
   )
 }
+
 
 export default MenuNavbar
