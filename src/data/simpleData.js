@@ -1005,13 +1005,24 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+export const prepareData = (keywords) =>
+  keywords.map((keyword, i) => ({
+      id: i,
+      c1: keyword,
+      c2: '',
+      c3: '',
+      c4: '',
+    })
+  )
 
-export const generateSimpleRows = (count) => {
+export const generateSimpleRows = (keywords, count) => {
   const result = []
+
+  count = count || keywords.length
 
   let i = 0
   while (i < count) { // выводит 0, затем 1, затем 2
-    let keyword = simpleKeywords[getRandomInt(999)]
+    let keyword = keywords[getRandomInt(999)]
     result.push({
       id: i,
       c1: keyword,

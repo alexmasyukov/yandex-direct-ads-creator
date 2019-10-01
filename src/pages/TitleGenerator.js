@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import DataGrid from "containers/DataGrid"
 import * as dataGridHandlers from 'utils/dataGridHandlers'
-import { generateSimpleRows } from 'data/simpleData'
+import { prepareData } from 'data/simpleData'
+import { oneKeywords } from "data/oneKeywords"
 
 const columns = [
   { key: "c1", name: "One", editable: true },
@@ -25,7 +26,8 @@ const columns = [
 
 class TitleGenerator extends Component {
   state = {
-    maxTitleLength: 20,
+    maxOneTitleLenght: 35,
+    maxTwoTitleLenght: 30,
     deleteNeedless: [
       'в',
       'на',
@@ -53,15 +55,15 @@ class TitleGenerator extends Component {
 
   get displayValueHandlers() {
     return {
-      c1: dataGridHandlers.highlightMaxLength(this.state.maxTitleLength),
-      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.deleteNeedless),
-      c3: dataGridHandlers.addNeedless(this.state.maxTitleLength, this.state.addNeedless)
+      c1: dataGridHandlers.highlightMaxLength(this.state.maxOneTitleLenght),
+      c2: dataGridHandlers.deleteNeedless(this.state.maxOneTitleLenght, this.state.deleteNeedless),
+      c3: dataGridHandlers.addNeedless(this.state.maxOneTitleLenght, this.state.addNeedless)
     }
   }
 
   get valueHandlers() {
     return {
-      c2: dataGridHandlers.deleteNeedless(this.state.maxTitleLength, this.state.deleteNeedless)
+      c2: dataGridHandlers.deleteNeedless(this.state.maxOneTitleLenght, this.state.deleteNeedless)
     }
   }
 
@@ -103,7 +105,7 @@ class TitleGenerator extends Component {
 
         <DataGrid
           columns={columns}
-          rows={generateSimpleRows(20)}
+          rows={prepareData(oneKeywords)}
           valueHandlers={this.valueHandlers}
           displayValueHandlers={this.displayValueHandlers}
         />

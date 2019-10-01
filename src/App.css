@@ -86,3 +86,8 @@ label {
 small.invalid-feedback {
     display: block !important;
 }
+
+span.generatedResultLabel {
+    margin-left: 20px;
+    margin-bottom: 0!important;
+}

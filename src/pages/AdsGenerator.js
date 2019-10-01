@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Form, Button, Card, Row, Col } from "react-bootstrap"
+import { Container, Form, Button, Card, Row, Col, Spinner } from "react-bootstrap"
 import AdDescription from "components/adsSettingsForm/AdDescription"
 import AdFastLink from "components/adsSettingsForm/AdFastLink"
 import { companyTableTitles } from "constants/companyTableTitles"
@@ -15,10 +15,12 @@ class AdsGenerator extends Component {
       title: 'второй заголовок'
     },
     descriptions: [
-      'Свежие букеты цветов и букеты в шляпных коробках с быстрой доставкой по Чите!'
+      'Свежие букеты цветов и букеты в шляпных коробках с быстрой доставкой по Чите!',
+      'Еще одно описание',
+      'И еще одно'
     ],
     linkUrl: 'https://klumba.store/',
-    linkVisible: 'klumba.store',
+    linkVisible: 'Цветы',
     fastLinks: [
       {
         title: 'Каталог',
@@ -31,7 +33,10 @@ class AdsGenerator extends Component {
         url: 'https://klumba.store/delivery'
       }
     ],
-    csv: ''
+    csv: '',
+    ads: [],
+    lastTimeGeneratedAds: '',
+    adsGenerationProcess: true
   }
 
   handleSecondTitleChange = () => {
@@ -106,82 +111,115 @@ class AdsGenerator extends Component {
     })
   }
 
+  componentDidMount() {
+    this.handleCreateAds()
+  }
+
   handleCreateAds = () => {
-    const data = []
-    data.push(companyTableTitles)
-
-    const groupName = (keyword, index) => keyword
-        .toLowerCase()
-        .replace(' ', '_')
-        .replace(' ', '_')
-        .replace(' ', '_')
-        .replace('\t', '_')
-        .replace('\r', '_')
-        .replace('\n', '_')
-      + '_'
-      + index
-
-
-    exampleKeywords.map((keyword, i) => {
-      data.push([
-        '-',
-        'Текстово-графическое',
-        '-',
-        groupName(keyword, i), // Название группы
-        i,
-        'Текстово-графическая',
-        this.state.companyName,
-        'RUB',
-        keyword,
-        'загол1',
-        'загол2',
-        'текст',
-        this.state.linkUrl,
-        this.state.linkVisible,
-        this.state.region,
-        5,
-        1
-        // '\t',
-        // '\t',
-        // '\t',
-      ])
-    })
-
-    const renderRow = (row) => row.join('\t') + `\r`
-
-    let csv = ''
-    data.forEach(row => {
-      csv += renderRow(row)
-    })
-
     this.setState({
-      csv: csv
+      adsGenerationProcess: true,
     })
+
+    const fastLinkTitles = this.state.fastLinks
+      .map((item) => item.title.trim())
+      .join('||')
+
+    const fastLinkUrls = this.state.fastLinks
+      .map((item) => item.url.trim())
+      .join('||')
+
+    const ads = []
+    ads.push(companyTableTitles)
+
+    exampleKeywords.forEach((keyword, adIndex) =>
+      this.state.descriptions.forEach((description, descIndex) => {
+        ads.push(
+          this.generateAd({
+            additionalAds: !!descIndex,
+            groupName: this.getGroupName(keyword, adIndex),
+            groupIndex: adIndex,
+            companyName: this.state.companyName.trim(),
+            keyword,
+            title1: '',
+            title2: '',
+            description,
+            linkUrl: this.state.linkUrl,
+            linkVisible: this.state.linkVisible,
+            region: this.state.region.trim(),
+            fastLinkTitles,
+            fastLinkUrls
+          })
+        )
+      })
+    )
+
+    const csv = ads
+      .map(row => row.join('\t'))
+      .join('\r')
+
+    setTimeout(() =>
+        this.setState({
+          csv,
+          ads,
+          adsGenerationProcess: false,
+          lastTimeGeneratedAds: new Date().toTimeString().replace(/ .*/, '')
+        })
+      , 300)
   }
 
 
-  componentDidMount() {
-    this.handleCreateAds()
-    // const data = []
-    // data.push(companyTableTitles)
-    // data.push([
-    //   1, 2, 3, 4
-    // ])
-    // data.push([
-    //   1, 2, 3, 4
-    // ])
-    //
-    //
-    //
-    // let csv = ''
-    // data.forEach(row => {
-    //   csv += renderRow(row)
-    // })
-    //
-    // // const a = data.map(row => console.log(renderRow(row)))
-    // this.setState({
-    //   csv: csv
-    // })
+  getGroupName = (keyword, index) =>
+    keyword
+      .toLowerCase()
+      .replace(' ', '_')
+      .replace(' ', '_')
+      .replace(' ', '_')
+      .replace('\t', '_')
+      .replace('\r', '_')
+      .replace('\n', '_')
+    + '_'
+    + index
+
+
+  generateAd({
+               additionalAds = false,
+               groupName,
+               groupIndex,
+               companyName,
+               keyword,
+               title1,
+               title2,
+               description,
+               linkUrl,
+               linkVisible,
+               region,
+               fastLinkTitles,
+               fastLinkUrls
+             }) {
+    return [
+      additionalAds ? '+' : '-',
+      'Текстово-графическое',
+      '-',
+      groupName, // Название группы
+      groupIndex,
+      'Текстово-графическая',
+      companyName,
+      'RUB',
+      keyword,
+      title1,
+      title2,
+      description,
+      linkUrl,
+      linkVisible,
+      region,
+      5,
+      1,
+      'Идут показы',
+      'Работает везде',
+      fastLinkTitles,
+      '',
+      fastLinkUrls
+    ]
   }
 
 
@@ -196,45 +234,6 @@ class AdsGenerator extends Component {
           {/*Генерация рекламной компании*/}
           {/*</h5>*/}
 
-          <Row className="pt-3">
-            <Col className="pr-1">
-              <Card>
-                <Card.Header>Компания</Card.Header>
-                <Card.Body>
-
-                  <Row>
-                    <Col md={6} className="pr-1">
-                      <Form.Group>
-                        <Form.Label>Название компании</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={this.state.companyName}
-                          onChange={e => this.handleInputTextChange({ companyName: e.target.value })}
-                          size="sm"
-                        />
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6} className="pl-1">
-                      <Form.Group>
-                        <Form.Label>Регион</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={this.state.region}
-                          onChange={e => this.handleInputTextChange({ region: e.target.value })}
-                          size="sm"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              sad
-            </Col>
-          </Row>
 
           <Row className="pt-3">
             <Col className="pr-1">
@@ -281,15 +280,18 @@ class AdsGenerator extends Component {
                     )
                   }
 
-                  <Form.Group>
-                    <Button
-                      variant="outline-success"
-                      size="sm"
-                      onClick={this.handleAddDescription}
-                    >
-                      + Добавить описание
-                    </Button>
-                  </Form.Group>
+                  {
+                    descriptions.length < 4 &&
+                    <Form.Group>
+                      <Button
+                        variant="outline-success"
+                        size="sm"
+                        onClick={this.handleAddDescription}
+                      >
+                        + Добавить описание
+                      </Button>
+                    </Form.Group>
+                  }
 
                   <Row>
                     <Col className="pr-1">
@@ -355,12 +357,68 @@ class AdsGenerator extends Component {
                 </Card.Body>
               </Card>
 
+              <Card className="mt-2">
+                <Card.Header>Компания</Card.Header>
+                <Card.Body>
+
+                  <Row>
+                    <Col md={6} className="pr-1">
+                      <Form.Group>
+                        <Form.Label>Название компании</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={this.state.companyName}
+                          onChange={e => this.handleInputTextChange({ companyName: e.target.value })}
+                          size="sm"
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6} className="pl-1 pr-2">
+                      <Form.Group>
+                        <Form.Label>Регион</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={this.state.region}
+                          onChange={e => this.handleInputTextChange({ region: e.target.value })}
+                          size="sm"
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                </Card.Body>
+              </Card>
+
             </Col>
           </Row>
 
-          <Row className="pt-4">
+          <Row className="pt-4 align-items-end">
             <Col>
-              <Button variant="outline-success" onClick={this.handleCreateAds}>Сгенерировать объявления</Button>
+              <Button
+                variant="outline-success"
+                onClick={this.handleCreateAds}
+                disabled={this.state.adsGenerationProcess}
+              >
+                {
+                  this.state.adsGenerationProcess ? (
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    `Сгенерировать объявления`
+                  )
+                }
+              </Button>
+              {
+                !this.state.adsGenerationProcess && this.state.ads.length &&
+                <span
+                  className="generatedResultLabel">Объявлений: <b>{this.state.ads.length}</b>, последняя генерация в <b>{this.state.lastTimeGeneratedAds}</b></span>
+              }
             </Col>
           </Row>
 
