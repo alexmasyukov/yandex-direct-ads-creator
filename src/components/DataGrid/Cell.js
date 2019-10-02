@@ -1,10 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Edit from "components/Table/UI/Edit";
 import WithTableContext from 'containers/WithTableContext'
 
-// displayValueHandlers
 
-class Cell extends PureComponent {
+class Cell extends Component {
   state = {
     isEdit: false
   }
