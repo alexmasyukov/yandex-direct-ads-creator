@@ -7,6 +7,7 @@ const initMaxLength = 33
 
 export const deleteNeedless = (maxLength = initMaxLength, needless = []) =>
   (value = '', prevCellValue = '') => {
+    // console.log(value, prevCellValue);
     if (prevCellValue.length < maxLength) return prevCellValue
 
     let newValue = prevCellValue.slice(0, maxLength)
@@ -17,7 +18,7 @@ export const deleteNeedless = (maxLength = initMaxLength, needless = []) =>
     // console.log(newValue, '*' + prevCellValue[newValue.length] + '*', newValue.lastIndexOf(' '))
 
     const lastWord = newValue.split(' ').pop()
-    for (const word of needless) {
+    for (let word of needless) {
       if (word.trim() === lastWord) {
         newValue = newValue.slice(0, newValue.lastIndexOf(' '))
         return newValue
@@ -33,10 +34,11 @@ export const addNeedless = (maxLength = initMaxLength, needless = []) =>
     const length = prevCellValue.length
     // if (length >= maxLength) return prevCellValue
 
-    console.log(prevCellValue);
-    for (const word of needless) {
+    // console.log(prevCellValue);
+    for (let word of needless) {
       if (word.length + length <= maxLength) {
         prevCellValue += word
+        break
       }
     }
 

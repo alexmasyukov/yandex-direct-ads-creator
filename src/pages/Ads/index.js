@@ -4,9 +4,10 @@ import AdDescription from "components/adsSettingsForm/AdDescription"
 import AdFastLink from "components/adsSettingsForm/AdFastLink"
 import { companyTableTitles } from "constants/companyTableTitles"
 import { exampleKeywords } from "constants/exampleKeywords";
+import { connect } from "react-redux";
 
 
-class AdsGenerator extends Component {
+class Ads extends Component {
   state = {
     companyName: 'Тестовая_Поиск',
     region: 'Забайкальский край',
@@ -441,4 +442,10 @@ class AdsGenerator extends Component {
   }
 }
 
-export default AdsGenerator
+function mapStateToProps(state) {
+  return {
+    data: state.data
+  }
+}
+
+export default connect(mapStateToProps)(Ads)

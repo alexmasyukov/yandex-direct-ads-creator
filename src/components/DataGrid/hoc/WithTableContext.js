@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableContext } from 'components/Table/TableContainer';
+import { TableContext } from '../context/TableContext'
 
 const WithTableContext = Component => props => (
   <TableContext.Consumer>

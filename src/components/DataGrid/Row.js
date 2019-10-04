@@ -1,5 +1,5 @@
 import React from 'react'
-import Cell from "components/Table/Cell"
+import Cell from "./Cell"
 
 const Row = ({ rowIndex, keys, values }) => (
   <tr>

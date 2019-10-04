@@ -1,8 +1,24 @@
-import { SET_TITLES } from "store/actionTypes";
+import * as types from "store/actionTypes";
 
-export function setTitles(titles) {
+
+export function setData(data) {
   return {
-    type: SET_TITLES,
+    type: types.SET_DATA,
+    payload: data
+  }
+}
+
+export function updateKeywords(keywords) {
+  return {
+    type: types.UPDATE_KEYWORDS,
+    payload: keywords
+  }
+}
+
+
+export function updateTitles(titles) {
+  return {
+    type: types.UPDATE_TITLES,
     payload: titles
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Edit from "components/Table/UI/Edit";
-import WithTableContext from 'containers/WithTableContext'
+import Edit from "./UI/Edit";
+import WithTableContext from './hoc/WithTableContext'
 
 
 class Cell extends Component {

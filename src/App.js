@@ -1,24 +1,26 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { BrowserRouter as Router } from "react-router-dom";
-import TitleGenerator from "pages/TitleGenerator";
-import AdsGenerator from "pages/AdsGenerator";
-import MenuLayout from "layouts/MenuLayout";
-
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from 'store/configStore'
+import Titles from 'pages/Titles/index'
+import Ads from 'pages/Ads/index'
+import MenuLayout from 'layouts/MenuLayout'
 import './App.css'
-
 
 function App() {
   return (
-    <Router>
-      <MenuLayout>
-        <Switch>
-          <Route path={'/title-generator'} component={TitleGenerator}/>
-          <Route path={'/ads-generator'} component={AdsGenerator}/>
-          <Route path={'/'} component={TitleGenerator}/>
-        </Switch>
-      </MenuLayout>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <MenuLayout>
+          <Switch>
+            <Route path={'/title'} component={Titles}/>
+            <Route path={'/ads'} component={Ads}/>
+            <Route path={'/'} component={Titles}/>
+          </Switch>
+        </MenuLayout>
+      </Router>
+    </Provider>
   )
 }
 

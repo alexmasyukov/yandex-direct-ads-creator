@@ -1,1 +1,3 @@
-export const SET_TITLES = 'SET_TITLES'
+export const SET_DATA = 'SET_DATA'
+export const UPDATE_KEYWORDS = 'UPDATE_KEYWORDS'
+export const UPDATE_TITLES = 'UPDATE_TITLES'

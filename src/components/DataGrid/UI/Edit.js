@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import WithTableContext from 'containers/WithTableContext'
+import WithTableContext from '../hoc/WithTableContext'
 
 class Edit extends Component {
   state = {

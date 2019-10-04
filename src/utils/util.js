@@ -12,3 +12,5 @@ export const normalized = (arr) => {
 
   return normalize
 }
+
+export const firstToUpperCase = text => text[0].toUpperCase() + text.slice(1)

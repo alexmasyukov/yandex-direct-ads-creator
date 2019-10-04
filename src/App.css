@@ -91,3 +91,7 @@ span.generatedResultLabel {
     margin-left: 20px;
     margin-bottom: 0!important;
 }
+
+.card-header {
+    font-weight: bold;
+}

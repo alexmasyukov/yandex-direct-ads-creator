@@ -1,5 +1,5 @@
 import React from 'react';
-import Row from "components/Table/Row"
+import Row from "./Row"
 
 const Table = ({ columns, rows }) => {
   return (
