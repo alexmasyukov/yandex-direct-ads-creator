@@ -9,13 +9,13 @@ import { normalized } from "utils/util"
 const columns = [
   { key: "c1", name: "№", editable: true },
   { key: "c2", name: "Исходный ключ", editable: true },
-  { key: "c3", name: "Обрезанный первый заголовок", editable: true },
-  { key: "c4", name: "Дополненный заголовок и заглавные буквы", editable: true },
+  { key: "c3", name: "2. Обрезанный первый заголовок", editable: true },
+  { key: "c4", name: "3. Дополненный заголовок и заглавные буквы", editable: true },
   // { key: "c4", name: "Второй заголовок", editable: true }
 ]
 
 
-class Table extends Component {
+class TitlesTable extends Component {
   get displayValueHandlers() {
     const { maxOneTitleLenght } = this.props
     return {
@@ -61,7 +61,7 @@ class Table extends Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.data
+    data: state.titles.data
   }
 }
 
@@ -74,4 +74,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Table);
+)(TitlesTable);

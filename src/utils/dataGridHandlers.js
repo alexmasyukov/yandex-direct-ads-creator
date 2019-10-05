@@ -38,6 +38,10 @@ export const addNeedless = (maxLength = initMaxLength, needless = []) =>
     for (let word of needless) {
       if (word.length + length <= maxLength) {
         prevCellValue += word
+        prevCellValue = prevCellValue
+          .replace('чита', 'Чита')
+        prevCellValue = prevCellValue
+          .replace('чите', 'Читe')
         break
       }
     }

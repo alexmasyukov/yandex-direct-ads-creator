@@ -28,6 +28,7 @@ class DataGrid extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!this.props.onDataUpdate) return
     console.log('componentDidUpdate');
 
     const keys = Object.keys(prevState)
@@ -43,6 +44,24 @@ class DataGrid extends Component {
     }
 
     this.props.onDataUpdate(result)
+  }
+
+  componentWillUnmount() {
+    console.log('componentDidUpdate');
+
+    const keys = Object.keys(this.state)
+    const length = this.state.c1.length
+    const result = new Array(length)
+
+    for (let idx = 0; idx < length; idx++) {
+      result[idx] = {}
+
+      keys.forEach(key => {
+        result[idx][key] = this.state[key][idx]
+      })
+    }
+
+    this.props.onUnmountDataGrid(result)
   }
 
   handleRunHandler = (event, value, rowIndex, columnKey, prevCellValue) => {
@@ -69,6 +88,7 @@ class DataGrid extends Component {
 
 
   static getDerivedStateFromProps(nextProps, prevState) {
+
     return {
       ...nextProps.data
     }

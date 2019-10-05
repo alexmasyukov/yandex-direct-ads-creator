@@ -1,43 +1,33 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux"
 import { Container, Form, Button, Card, Row, Col, Spinner } from "react-bootstrap"
 import AdDescription from "components/adsSettingsForm/AdDescription"
 import AdFastLink from "components/adsSettingsForm/AdFastLink"
 import { companyTableTitles } from "constants/companyTableTitles"
-import { exampleKeywords } from "constants/exampleKeywords";
-import { connect } from "react-redux";
+import { setAdsPageCache } from 'store/actions/action'
 
+// const Ads = () => {
+//   return (
+//     <Container className="pt-4">
+//       <h4>Шаг 1. Формируем заголовки</h4>
+//       <TitleSettingForm className="pb-2"/>
+//       <TitlesTable/>
+//     </Container>
+//   )
+// }
 
 class Ads extends Component {
   state = {
-    companyName: 'Тестовая_Поиск',
-    region: 'Забайкальский край',
-    secondTitle: {
-      manually: true,
-      title: 'второй заголовок'
-    },
-    descriptions: [
-      'Свежие букеты цветов и букеты в шляпных коробках с быстрой доставкой по Чите!',
-      'Еще одно описание',
-      'И еще одно'
-    ],
-    linkUrl: 'https://klumba.store/',
-    linkVisible: 'Цветы',
-    fastLinks: [
-      {
-        title: 'Каталог',
-        description: '',
-        url: 'https://klumba.store/catalog'
-      },
-      {
-        title: 'Доставка',
-        description: '',
-        url: 'https://klumba.store/delivery'
-      }
-    ],
-    csv: '',
-    ads: [],
-    lastTimeGeneratedAds: '',
-    adsGenerationProcess: true
+    ...this.props.adsPageCache
+  }
+
+  componentDidMount() {
+    this.handleCreateAds()
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+    this.props.setAdsPageCache({ ...this.state })
   }
 
   handleSecondTitleChange = () => {
@@ -112,14 +102,16 @@ class Ads extends Component {
     })
   }
 
-  componentDidMount() {
-    this.handleCreateAds()
-  }
+  getTitles = () => this.props.titlesDataGridCache.map(row => row.c3 || '')
+  extractKeywords = (object) =>  object.map(row => row.c1 || '')
+
 
   handleCreateAds = () => {
     this.setState({
       adsGenerationProcess: true,
     })
+
+    const titles = this.getTitles()
 
     const fastLinkTitles = this.state.fastLinks
       .map((item) => item.title.trim())
@@ -132,26 +124,31 @@ class Ads extends Component {
     const ads = []
     ads.push(companyTableTitles)
 
-    exampleKeywords.forEach((keyword, adIndex) =>
-      this.state.descriptions.forEach((description, descIndex) => {
-        ads.push(
-          this.generateAd({
-            additionalAds: !!descIndex,
-            groupName: this.getGroupName(keyword, adIndex),
-            groupIndex: adIndex,
-            companyName: this.state.companyName.trim(),
-            keyword,
-            title1: '',
-            title2: '',
-            description,
-            linkUrl: this.state.linkUrl,
-            linkVisible: this.state.linkVisible,
-            region: this.state.region.trim(),
-            fastLinkTitles,
-            fastLinkUrls
-          })
-        )
-      })
+
+    const keywords = this.extractKeywords(this.props.titlesDataGridCache)
+    keywords.forEach((keyword, adIndex) => {
+        this.state.descriptions.forEach((description, descIndex) => {
+          ads.push(
+            this.generateAd({
+              additionalAds: !!descIndex,
+              groupName: this.getGroupName(keyword, adIndex),
+              groupIndex: adIndex,
+              companyName: this.state.companyName.trim(),
+              keyword,
+              title1: titles[adIndex],
+              title2: '',
+              description,
+              linkUrl: this.state.linkUrl,
+              linkVisible: this.state.linkVisible,
+              region: this.state.region.trim(),
+              fastLinkTitles,
+              fastLinkUrls,
+              corrections: ['Только свежие цветы', 'Учтем пожелания', 'Круглосуточная доставка']
+              //Вернём деньги за доставку, если опоздаем более 5 минут.//Доставляем без опозданий
+            })
+          )
+        })
+      }
     )
 
     const csv = ads
@@ -195,7 +192,8 @@ class Ads extends Component {
                linkVisible,
                region,
                fastLinkTitles,
-               fastLinkUrls
+               fastLinkUrls,
+               corrections
              }) {
     return [
       additionalAds ? '+' : '-',
@@ -219,7 +217,8 @@ class Ads extends Component {
       'Работает везде',
       fastLinkTitles,
       '',
-      fastLinkUrls
+      fastLinkUrls,
+      corrections.join('||')
     ]
   }
 
@@ -444,8 +443,18 @@ class Ads extends Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.data
+    adsPageCache: state.adsPageCache,
+    titlesDataGridCache: state.titlesDataGridCache,
   }
 }
 
-export default connect(mapStateToProps)(Ads)
+function mapDispatchToProps(dispatch) {
+  return {
+    setAdsPageCache: cache => dispatch(setAdsPageCache(cache))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Ads)

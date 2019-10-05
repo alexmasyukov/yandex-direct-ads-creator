@@ -22,3 +22,32 @@ export function updateTitles(titles) {
     payload: titles
   }
 }
+
+export function updateFormField(object) {
+  return {
+    type: types.UPDATE_FORM_FIELD,
+    payload: object
+  }
+}
+
+export function setAdsPageCache(cache) {
+  return {
+    type: types.SET_ADS_PAGE_CACHE,
+    payload: cache
+  }
+}
+
+export function setTitlesPageCache(cache) {
+  return {
+    type: types.SET_TITLES_PAGE_CACHE,
+    payload: cache
+  }
+}
+
+export function setTitlesDatagridCache(cache) {
+  console.log('setTitlesDatagridCache', cache);
+  return {
+    type: types.SET_TITLES_DATAGRID_CACHE,
+    payload: cache
+  }
+}
