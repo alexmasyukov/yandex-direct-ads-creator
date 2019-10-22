@@ -102,6 +102,16 @@ class Ads extends Component {
     })
   }
 
+  handleSecondTitle = (value) => {
+    this.setState(prevState => ({
+      ...prevState,
+      secondTitle: {
+        ...prevState.secondTitle,
+        title: value
+      }
+    }))
+  }
+
   getTitles = () => this.props.titlesDataGridCache.map(row => row.c3 || '')
   extractKeywords = (object) =>  object.map(row => row.c1 || '')
 
@@ -136,14 +146,14 @@ class Ads extends Component {
               companyName: this.state.companyName.trim(),
               keyword,
               title1: titles[adIndex],
-              title2: '',
+              title2: this.state.secondTitle.title,
               description,
               linkUrl: this.state.linkUrl,
               linkVisible: this.state.linkVisible,
               region: this.state.region.trim(),
               fastLinkTitles,
               fastLinkUrls,
-              corrections: ['Только свежие цветы', 'Учтем пожелания', 'Круглосуточная доставка']
+              corrections: ['Только свежие цветы', 'Доставляем без опозданий', 'Учтем пожелания', 'Круглосуточная доставка']
               //Вернём деньги за доставку, если опоздаем более 5 минут.//Доставляем без опозданий
             })
           )
@@ -211,8 +221,8 @@ class Ads extends Component {
       linkUrl,
       linkVisible,
       region,
-      5,
-      1,
+      18,
+      15,
       'Идут показы',
       'Работает везде',
       fastLinkTitles,
@@ -259,7 +269,13 @@ class Ads extends Component {
                       secondTitle.manually &&
                       <Col>
                         <Form.Group>
-                          <Form.Control type="text" placeholder="" size="sm"/>
+                          <Form.Control
+                            value={secondTitle.title}
+                            onChange={e => this.handleSecondTitle(e.target.value)}
+                            type="text"
+                            placeholder=""
+                            size="sm"
+                          />
                           <Form.Text className="text-muted">
                             Максимум 30 символов
                           </Form.Text>

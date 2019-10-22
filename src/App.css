@@ -22,6 +22,10 @@ table tr td:first-of-type {
     min-width: 40px!important;
 }
 
+table tr td:nth-child(2) {
+    min-width: 40px!important;
+}
+
 table td.edit {
     padding: 0 10px !important;
 }

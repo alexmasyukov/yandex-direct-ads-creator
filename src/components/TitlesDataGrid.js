@@ -7,10 +7,11 @@ import Loading from "components/Loading"
 import { normalized } from "utils/util"
 
 const columns = [
-  { key: "c1", name: "№", editable: true },
-  { key: "c2", name: "Исходный ключ", editable: true },
-  { key: "c3", name: "2. Обрезанный первый заголовок", editable: true },
-  { key: "c4", name: "3. Дополненный заголовок и заглавные буквы", editable: true },
+  { key: "c1", name: "", editable: true },
+  { key: "c2", name: "№", editable: true },
+  { key: "c3", name: "Исходный ключ", editable: true },
+  { key: "c4", name: "2. Обрезанный первый заголовок", editable: true },
+  { key: "c5", name: "3. Дополненный заголовок и заглавные буквы", editable: true },
   // { key: "c4", name: "Второй заголовок", editable: true }
 ]
 

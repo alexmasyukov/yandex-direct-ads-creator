@@ -106,6 +106,21 @@ class DataGrid extends Component {
     })
   }
 
+  handleDeleteRow = (rowIndex) => {
+    console.log(rowIndex);
+    console.log(this.state);
+
+    this.setState(prevState => {
+      const newState = {...prevState}
+      newState.c1.splice(rowIndex, 1)
+      newState.c2.splice(rowIndex, 1)
+      newState.c3.splice(rowIndex, 1)
+      newState.id.splice(rowIndex, 1)
+
+      return newState
+    })
+  }
+
 
   render() {
     if (!('c1' in this.state)) return <p>processed...</p>
@@ -121,6 +136,7 @@ class DataGrid extends Component {
         <Table
           columns={this.props.columns}
           rows={this.prepareRows()}
+          onDeleteRow={this.handleDeleteRow}
         />
       </TableContext.Provider>
     )

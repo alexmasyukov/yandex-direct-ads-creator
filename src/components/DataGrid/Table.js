@@ -1,7 +1,7 @@
 import React from 'react';
 import Row from "./Row"
 
-const Table = ({ columns, rows }) => {
+const Table = ({ columns, rows, onDeleteRow }) => {
   return (
     <table className="table">
       <thead>
@@ -21,6 +21,7 @@ const Table = ({ columns, rows }) => {
             rowIndex={row.index}
             keys={row.keys}
             values={row.values}
+            onDeleteRow={onDeleteRow}
           />
         )
       }
