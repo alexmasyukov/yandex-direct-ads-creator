@@ -165,8 +165,9 @@ class TitleSettingForm extends Component {
         <Col pt={4}>
 
           <Button
-            variant="success"
+            variant="outline-success"
             onClick={this.handleStartProcess}
+            className="mt-2"
           >
             Обработать ключи
           </Button>

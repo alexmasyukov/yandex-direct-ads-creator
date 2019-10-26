@@ -238,7 +238,6 @@ class Ads extends Component {
 
     return (
       <>
-        <Container>
           {/*fluid={true}*/}
           {/*<h5 className="pt-3 pb-0">*/}
           {/*Генерация рекламной компании*/}
@@ -439,8 +438,8 @@ class Ads extends Component {
           </Row>
 
 
-        </Container>
-        <Container fluid={true} className="pt-5">
+
+        <div className="pt-5">
           <Form.Control
             as="textarea"
             rows="3"
@@ -451,7 +450,7 @@ class Ads extends Component {
             }}
             value={this.state.csv}
           />
-        </Container>
+        </div>
       </>
     )
   }
