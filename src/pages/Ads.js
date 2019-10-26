@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Container, Form, Button, Card, Row, Col, Spinner } from "react-bootstrap"
+import { Form, Button, Card, Row, Col, Spinner } from "react-bootstrap"
 import AdDescription from "components/adsSettingsForm/AdDescription"
 import AdFastLink from "components/adsSettingsForm/AdFastLink"
 import { companyTableTitles } from "constants/companyTableTitles"

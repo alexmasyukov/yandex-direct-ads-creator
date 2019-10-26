@@ -1,15 +1,18 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import store from 'store/configStore'
-import MenuLayout from 'layouts/MenuLayout'
+// import MenuLayout from 'layouts/MenuLayout'
 import './App.css'
-import Creator from "pages/Creator";
+// import Creator from "pages/Creator";
+import Filter from "pages/Filter";
 
 function App() {
   return (
     <Provider store={store}>
+      {/*<Creator/>*/}
+      <Filter/>
+
       {/*<MenuLayout>*/}
-        <Creator/>
       {/*</MenuLayout>*/}
       {/*<Router>*/}
 
