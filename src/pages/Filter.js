@@ -3,7 +3,7 @@ import Word from "components/Filter/Word"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 import Container from "react-bootstrap/Container"
-import Keyword from "components/Filter/Keyword";
+import Keyword from "components/Filter/Keyword"
 
 const initialKeywords = [
   'доставка цветов',
@@ -53,92 +53,113 @@ const initialKeywords = [
 //   }))
 // }
 
+function getValuesByKey(key, array) {
+  return array.reduce(function (values, item) {
+    (key in item) && values.push(item[key])
+    return values
+  }, [])
+}
+
 class Filter extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.handleWordClick = this.handleWordClick.bind(this)
   }
 
   state = {
-    keywords: {},
-    words: {}
+    keywords: [],
+    words: []
   }
 
   setKeywords() {
-    const keywords = []
-
-    initialKeywords.forEach((keyword, i) => {
-      keywords[i] = {
-        id: i,
-        unactive: false,
-        keyword,
-      }
-    })
+    const keywords = initialKeywords.map((keyword, i) => ({
+      id: i,
+      unactive: false,
+      keyword,
+    }))
 
     this.setState({
       keywords
-    })
+    }, () => this.setWords())
   }
 
   setWords() {
-    const allWords = Array.from(new Set(initialKeywords.join(' ').split(' ')))
-    const words = []
+    const allWords = Array.from(new Set(
+      getValuesByKey('keyword', this.state.keywords).join(' ').split(' ')
+    ))
 
-    allWords.forEach((word, i) => {
-      words[i] = {
-        id: i,
-        unactive: false,
-        word,
-      }
+    const words = allWords.map((word, i) => ({
+      id: i,
+      unactive: false,
+      isNotUse: false,
+      word,
+    }))
+
+    this.setState({
+      words
     })
-
-    this
-      .setState({
-        words
-      })
   }
 
   componentDidMount() {
     this.setKeywords()
-    this.setWords()
   }
 
-  setKeywordUnactiveStatus(id, status) {
-    this.setState(prevState => ({
-      keywords: {
-        ...prevState.keywords,
-        [id]: {
-          ...prevState.keywords[id],
-          unactive: status
-        }
+  // todo После нажатия на включение слова,
+  //  нужно проверять его ключевик на другие отключенные слова,
+  //  если они есть, не включаем его обратно
+
+  filterWords() {
+    console.log('filterWords')
+    const wordsByOnlyActiveKeywords = Array.from(new Set(
+      this.state.keywords.reduce(function (values, item) {
+        (item.unactive === false) && values.push(item.keyword)
+        return values
+      }, []).join(' ').split(' ')
+    ))
+
+    console.log(wordsByOnlyActiveKeywords.length)
+    const oldWords = [...this.state.words]
+    const words = oldWords.map(item => {
+      if (!wordsByOnlyActiveKeywords.includes(item.word)) {
+        item.isNotUse = true
+      } else {
+        item.isNotUse = false
       }
-    }))
+      return item
+    })
+
+    this.setState({
+      words
+    })
+
+    console.log(wordsByOnlyActiveKeywords)
   }
 
   filterKeywords(word, unactiveStatus) {
-    const keywords = Object.values(this.state.keywords)
-
-    for (let i = 0; i < keywords.length; i++) {
-      const kw = keywords[i]
-      console.log(kw.keyword, word)
-      console.log(kw.keyword.split(' ').includes(word))
-      if (kw.keyword.trim().split(' ').includes(word)) {
-        this.setKeywordUnactiveStatus(kw.id, unactiveStatus)
+    const keywords = this.state.keywords.map(keyword => {
+      if (keyword.keyword.trim().split(' ').includes(word)) {
+        keyword.unactive = unactiveStatus
       }
-    }
+      return keyword
+    })
+
+    this.setState({
+      keywords
+    }, () => this.filterWords())
   }
 
   handleWordClick(id, word) {
-    // console.log(id, word)
-    this.setState(prevState => ({
-      words: {
-        ...prevState.words,
-        [id]: {
-          ...prevState.words[id],
-          unactive: !prevState.words[id].unactive
-        }
+    const index = this.state.words.findIndex(word => word.id === id)
+    const status = !this.state.words[index].unactive
+
+    this.setState(prevState => {
+      const words = [...prevState.words]
+      words[index].unactive = status
+
+      return {
+        words
       }
-    }), () => this.filterKeywords(word, this.state.words[id].unactive))
+    }, () => this.filterKeywords(word, status))
   }
 
 
@@ -148,16 +169,15 @@ class Filter extends Component {
       <Container>
         <Row>
           <Col md={8}>
-            {Object.values(keywords).map(keyword =>
+            {keywords.map(keyword =>
               <Keyword
                 key={keyword.id}
-                // onClick={this.handleKeywordClick}
                 {...keyword}
               />
             )}
           </Col>
           <Col md={4}>
-            {Object.values(words).map(word =>
+            {words.map(word =>
               <Word
                 key={word.id}
                 onClick={this.handleWordClick}
