@@ -6,90 +6,8 @@ import Container from "react-bootstrap/Container"
 import Keyword from "components/Filter/Keyword"
 import Panel from "components/Filter/Panel"
 
-const initialKeywords = [
-  'доставка цветов',
-  'доставка цвета',
-  'доставка цветов чита',
-  'доставка цветов недорого',
-  'заказать цветы с доставкой',
-  'заказ цветов с доставкой',
-  'доставка цветов круглосуточно',
-  'доставка цветов чита недорого',
-  'доставка цветов на дом',
-  'заказ цветов с доставкой чита',
-  'доставка цветом на дом',
-  'доставка цветов курьером',
-  'доставка цветов чита круглосуточно',
-  'заказать цветы с доставкой в чите',
-  'чита доставка цветов на дом',
-  'доставка цветов дешево',
-  'доставка цветов на дом недорого',
-  'доставка цветов в чите недорого на дом',
-  'доставка цветов в чите курьером',
-  'заказ цветов с доставкой чита недорого',
-  'заказ доставки цветов недорого',
-  'интернет доставка цветов',
-  'магазин цветов с доставкой',
-  'доставка цветов в чите курьером недорого',
-  'купить цветы с доставкой',
-  'доставка цветов каталог',
-  'доставка цветов чита дешево',
-  'телефон доставки цветов',
-  'доставка цветов круглосуточно дешево',
-  'заказать цветы с доставкой недорого',
-  'доставка цветов день в день',
-  'доставка цветов',
-  'доставка цвета',
-  'доставка цветов чита',
-  'доставка цветов недорого',
-  'заказать цветы с доставкой',
-  'заказ цветов с доставкой',
-  'доставка цветов круглосуточно',
-  'доставка цветов чита недорого',
-  'доставка цветов на дом',
-  'заказ цветов с доставкой чита',
-  'доставка цветом на дом',
-  'доставка цветов курьером',
-  'доставка цветов чита круглосуточно',
-  'заказать цветы с доставкой в чите',
-  'чита доставка цветов на дом',
-  'доставка цветов дешево',
-  'доставка цветов на дом недорого',
-  'доставка цветов в чите недорого на дом',
-  'доставка цветов в чите курьером',
-  'заказ цветов с доставкой чита недорого',
-  'заказ доставки цветов недорого',
-  'интернет доставка цветов',
-  'магазин цветов с доставкой',
-  'доставка цветов в чите курьером недорого',
-  'купить цветы с доставкой',
-  'доставка цветов каталог',
-  'доставка цветов чита дешево',
-  'телефон доставки цветов',
-  'доставка цветов круглосуточно дешево',
-  'заказать цветы с доставкой недорого',
-  'доставка цветов день в день',
-  'доставка цветов',
-  'доставка цвета',
-  'доставка цветов чита',
-  'доставка цветов недорого',
-  'заказать цветы с доставкой',
-  'заказ цветов с доставкой',
-  'доставка цветов круглосуточно',
-  'доставка цветов чита недорого',
-  'доставка цветов на дом',
-  'заказ цветов с доставкой чита',
-  'доставка цветом на дом',
-  'доставка цветов курьером',
-  'доставка цветов чита круглосуточно',
-  'заказать цветы с доставкой в чите',
-  'чита доставка цветов на дом',
-  'доставка цветов дешево',
-  'доставка цветов на дом недорого',
-  'доставка цветов в чите недорого на дом',
-
-]
-
+import { simpleFilterKeywords } from 'data/simpleFilterKeywords'
+import KeywordsList from "components/Filter/KeywordsList";
 
 function getValuesByKey(key, array) {
   return array.reduce(function (values, item) {
@@ -105,11 +23,13 @@ class Filter extends Component {
     this.handleCopyKeywords = this.handleCopyKeywords.bind(this)
     this.handleCopyMinusWords = this.handleCopyMinusWords.bind(this)
     this.importKeywordsFromClipboard = this.importKeywordsFromClipboard.bind(this)
+    this.handleWordMouseEnter = this.handleWordMouseEnter.bind(this)
   }
 
   state = {
     keywords: [],
-    words: []
+    words: [],
+    keywordsOfSelectWord: []
   }
 
   setKeywords(initialKeywords) {
@@ -125,16 +45,18 @@ class Filter extends Component {
   }
 
   setWords() {
-    const allWords = Array.from(new Set(
-      getValuesByKey('keyword', this.state.keywords).join(' ').split(' ')
-    ))
-
-    const words = allWords.map((word, i) => ({
-      id: i,
-      unactive: false,
-      isNotUse: false,
-      word,
-    }))
+    const words =
+      Array
+        .from(new Set(
+          getValuesByKey('keyword', this.state.keywords).join(' ').split(' ')
+        ))
+        .sort((a, b) => a[0].toLowerCase() > b[0].toLowerCase() ? 1 : -1)
+        .map((word, i) => ({
+          id: i,
+          unactive: false,
+          isNotUse: false,
+          word,
+        }))
 
     this.setState({
       words
@@ -146,7 +68,7 @@ class Filter extends Component {
   }
 
   importSampleKeywords() {
-    this.setKeywords(initialKeywords)
+    this.setKeywords(simpleFilterKeywords)
   }
 
   importKeywordsFromClipboard() {
@@ -245,8 +167,16 @@ class Filter extends Component {
     this.copyToClipboard(this.convertMinusWordsToText(this.getMinusWords()))
   }
 
+  handleWordMouseEnter(word) {
+    this.setState(prevState => ({
+      keywordsOfSelectWord: prevState.keywords.filter(keyword =>
+        keyword.keyword.trim().split(' ').includes(word))
+    }))
+    // console.log(word)
+  }
+
   render() {
-    const { keywords, words } = this.state
+    const { keywords, words, keywordsOfSelectWord } = this.state
     const minusWords = this.getMinusWords()
     const activeKeywords = this.getActiveKeywords()
     return (
@@ -261,22 +191,28 @@ class Filter extends Component {
         <Container>
           <Row>
             <Col md={7}>
-              <h6>Ключевые фразы</h6>
-              <hr/>
-              {keywords.map(keyword =>
-                <Keyword
-                  key={keyword.id}
-                  {...keyword}
+              <div style={{position: 'fixed', top: 10, left: 20}}>
+                <h6>Ключевые фразы ({keywordsOfSelectWord.length})</h6>
+                {/*<hr/>*/}
+                {/*{keywords.map(keyword =>*/}
+                {/*<Keyword*/}
+                {/*key={keyword.id}*/}
+                {/*{...keyword}*/}
+                {/*/>*/}
+                {/*)}*/}
+                <KeywordsList
+                  keywords={keywordsOfSelectWord}
                 />
-              )}
+              </div>
             </Col>
             <Col md={3}>
-              <h6>Минус слова</h6>
+              <h6>Слова ({words.length})</h6>
               <hr/>
               {words.map(word =>
                 <Word
                   key={word.id}
                   onClick={this.handleWordClick}
+                  onMouseEnter={this.handleWordMouseEnter}
                   {...word}
                 />
               )}

@@ -6,7 +6,7 @@ import Informer from "components/Filter/Informer"
 import arrowDown from "assets/download-arrow.svg"
 import SpinButton from "components/Filter/SpinButton";
 
-const Panel = ({minusWordsCount, activeKeywordsCount, onClickInmportKeywords, onClickCopyKeywords, onClickCopyMinusWords}) => {
+const Panel = ({children, minusWordsCount, activeKeywordsCount, onClickInmportKeywords, onClickCopyKeywords, onClickCopyMinusWords}) => {
   return (
     <div className={styles.panel}>
 
