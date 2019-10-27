@@ -104,6 +104,7 @@ class Filter extends Component {
     this.handleWordClick = this.handleWordClick.bind(this)
     this.handleCopyKeywords = this.handleCopyKeywords.bind(this)
     this.handleCopyMinusWords = this.handleCopyMinusWords.bind(this)
+    this.importKeywordsFromClipboard = this.importKeywordsFromClipboard.bind(this)
   }
 
   state = {
@@ -111,7 +112,7 @@ class Filter extends Component {
     words: []
   }
 
-  setKeywords() {
+  setKeywords(initialKeywords) {
     const keywords = initialKeywords.map((keyword, i) => ({
       id: i,
       unactive: false,
@@ -141,7 +142,24 @@ class Filter extends Component {
   }
 
   componentDidMount() {
-    this.setKeywords()
+    this.importSampleKeywords()
+  }
+
+  importSampleKeywords() {
+    this.setKeywords(initialKeywords)
+  }
+
+  importKeywordsFromClipboard() {
+    const app = this
+    navigator.clipboard.readText()
+      .then(text => {
+        app.setKeywords(text.split('\n'))
+      })
+      .catch(err => {
+        // возможно, пользователь не дал разрешение на чтение данных из буфера обмена
+        // console.log('Something went wrong', err);
+        console.log('Не могу прочитать текст из буфера обмена', err)
+      })
   }
 
   // todo После нажатия на включение слова,
@@ -238,10 +256,13 @@ class Filter extends Component {
           activeKeywordsCount={activeKeywords.length}
           onClickCopyKeywords={this.handleCopyKeywords}
           onClickCopyMinusWords={this.handleCopyMinusWords}
+          onClickInmportKeywords={this.importKeywordsFromClipboard}
         />
         <Container>
           <Row>
             <Col md={7}>
+              <h6>Ключевые фразы</h6>
+              <hr/>
               {keywords.map(keyword =>
                 <Keyword
                   key={keyword.id}
@@ -249,7 +270,9 @@ class Filter extends Component {
                 />
               )}
             </Col>
-            <Col md={5}>
+            <Col md={3}>
+              <h6>Минус слова</h6>
+              <hr/>
               {words.map(word =>
                 <Word
                   key={word.id}
