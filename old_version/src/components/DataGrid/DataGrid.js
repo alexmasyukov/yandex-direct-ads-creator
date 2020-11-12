@@ -15,7 +15,7 @@ class DataGrid extends Component {
     return this.state[firsKey].map((value, index) => {
       const values = []
       keys.map(key =>
-        values.push(this.state[key][index])
+         values.push(this.state[key][index])
       )
 
       return {
@@ -29,7 +29,7 @@ class DataGrid extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!this.props.onDataUpdate) return
-    console.log('componentDidUpdate');
+    console.log('componentDidUpdate')
 
     const keys = Object.keys(prevState)
     const length = prevState.c1.length
@@ -47,7 +47,7 @@ class DataGrid extends Component {
   }
 
   componentWillUnmount() {
-    console.log('componentDidUpdate');
+    console.log('componentDidUpdate')
 
     const keys = Object.keys(this.state)
     const length = this.state.c1.length
@@ -95,7 +95,7 @@ class DataGrid extends Component {
   }
 
   handleEditCellChange = (value, rowIndex, columnKey) => {
-    // console.log('handleEditCellChange Table: ', value, rowIndex, columnKey)
+    console.log('handleEditCellChange Table: ', value, rowIndex, columnKey)
     this.setState(prevState => {
       const newState = prevState[columnKey]
       newState[rowIndex] = value
@@ -107,11 +107,11 @@ class DataGrid extends Component {
   }
 
   handleDeleteRow = (rowIndex) => {
-    console.log(rowIndex);
-    console.log(this.state);
+    console.log(rowIndex)
+    console.log(this.state)
 
     this.setState(prevState => {
-      const newState = {...prevState}
+      const newState = { ...prevState }
       newState.c1.splice(rowIndex, 1)
       newState.c2.splice(rowIndex, 1)
       newState.c3.splice(rowIndex, 1)
@@ -124,21 +124,21 @@ class DataGrid extends Component {
 
   render() {
     if (!('c1' in this.state)) return <p>processed...</p>
-    console.log('Render DataGrid');
+    console.log('Render DataGrid')
 
     return (
-      <TableContext.Provider value={{
-        valueHandlers: this.props.valueHandlers,
-        displayValueHandlers: this.props.displayValueHandlers,
-        onEditCellChange: this.handleEditCellChange,
-        onRunHandlerClick: this.handleRunHandler
-      }}>
-        <Table
-          columns={this.props.columns}
-          rows={this.prepareRows()}
-          onDeleteRow={this.handleDeleteRow}
-        />
-      </TableContext.Provider>
+       <TableContext.Provider value={{
+         valueHandlers: this.props.valueHandlers,
+         displayValueHandlers: this.props.displayValueHandlers,
+         onEditCellChange: this.handleEditCellChange,
+         onRunHandlerClick: this.handleRunHandler
+       }}>
+         <Table
+            columns={this.props.columns}
+            rows={this.prepareRows()}
+            onDeleteRow={this.handleDeleteRow}
+         />
+       </TableContext.Provider>
     )
   }
 }

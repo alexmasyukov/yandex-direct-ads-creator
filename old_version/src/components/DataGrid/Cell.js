@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Edit from "./UI/Edit";
+import React, { Component } from 'react'
+import Edit from "./UI/Edit"
 import WithTableContext from './hoc/WithTableContext'
 
 
@@ -9,14 +9,15 @@ class Cell extends Component {
   }
 
   handleCellClick = (event) => {
-    event.preventDefault();
+    console.log('handleCellClick', event)
+    event.preventDefault()
     this.setState({
       isEdit: true
     })
   }
 
   handleEnter = (value, rowIndex, columnKey) => {
-    // console.log('handleEnter:', value, rowIndex, columnKey);
+    console.log('handleEnter:', value, rowIndex, columnKey);
     this.setState({
       isEdit: false
     })
@@ -50,30 +51,30 @@ class Cell extends Component {
     }
 
     return (
-      <td
-        className={cls.join(' ')}
-        onClick={this.handleCellClick}
-      >
-        {
-          this.state.isEdit ?
-            <Edit
-              value={value}
-              onEnter={this.handleEnter}
-              rowIndex={rowIndex}
-              columnKey={columnKey}
-            />
-            :
-            <>
-              {displayValue}
-              {
-                valueHandlers[columnKey] && <div
-                  onClick={(event) => onRunHandlerClick(event, value, rowIndex, columnKey, prevCellValue)}
-                >&nbsp;</div>
-              }
-            </>
-        }
-      </td>
-    );
+       <td
+          className={cls.join(' ')}
+          onClick={this.handleCellClick}
+       >
+         {
+           this.state.isEdit ?
+              <Edit
+                 value={value}
+                 onEnter={this.handleEnter}
+                 rowIndex={rowIndex}
+                 columnKey={columnKey}
+              />
+              :
+              <>
+                {displayValue}
+                {
+                  valueHandlers[columnKey] && <div
+                     onClick={(event) => onRunHandlerClick(event, value, rowIndex, columnKey, prevCellValue)}
+                  >&nbsp;</div>
+                }
+              </>
+         }
+       </td>
+    )
   }
 }
 
