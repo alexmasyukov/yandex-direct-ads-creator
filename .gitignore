@@ -22,3 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .idea
+old_version/node_modules/
+ts-app/yarn.lock
+old_version/package-lock.json
+ts-app/.eslintcache

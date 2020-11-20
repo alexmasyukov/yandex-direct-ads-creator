@@ -191,7 +191,7 @@ class Filter extends Component {
         <Container>
           <Row>
             <Col md={7}>
-              <div style={{position: 'fixed', top: 10, left: 20}}>
+              <div style={{ position: 'fixed', top: 10, left: 20 }}>
                 <h6>Ключевые фразы ({keywordsOfSelectWord.length})</h6>
                 {/*<hr/>*/}
                 {/*{keywords.map(keyword =>*/}
@@ -207,7 +207,7 @@ class Filter extends Component {
             </Col>
             <Col md={3}>
               <h6>Слова ({words.length})</h6>
-              <hr/>
+              <hr />
               {words.map(word =>
                 <Word
                   key={word.id}

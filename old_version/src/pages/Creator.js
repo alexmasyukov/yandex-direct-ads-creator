@@ -6,20 +6,20 @@ import TitleSettingForm from "components/TitleSettingForm"
 import Ads from "pages/Ads"
 import Expander from "components/Expander"
 
-const Creator = ({titleCount = 0}) => {
+const Creator = ({ titleCount = 0 }) => {
   return (
     <Container className="pt-4">
       <Expander title="Шаг 1. Настройка заголовков" expand={true}>
-        <TitleSettingForm className="pb-2"/>
+        <TitleSettingForm className="pb-2" />
       </Expander>
 
       <Expander title={`Заголовки (${titleCount})`} expand={false}>
-        <br/>
-        <TitlesDataGrid/>
+        <br />
+        <TitlesDataGrid />
       </Expander>
 
       <Expander title="Шаг 2. Генерация объеявлений" expand={true}>
-        <Ads/>
+        <Ads />
       </Expander>
     </Container>
   )
