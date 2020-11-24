@@ -1,26 +1,18 @@
-import React, {
-  FC,
-  Ref,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  MouseEvent,
-} from 'react'
+import React, { FC, useCallback, useEffect, useRef, MouseEvent } from 'react'
 // import { Steps, Row, Col } from "antd"
 // import "antd/dist/antd.css"
 import styles from 'components/app.module.sass'
+import { useWindowDimensions } from './useWindowDimensions'
 
 // const { Step } = Steps
 
-interface Props {
-  current: number
-  keywordsCount: number
-  stopwordsCount: number
-  adsCount: number
-  hanleChange(current: number): void
-}
+// interface Props {
+//   current: number
+//   keywordsCount: number
+//   stopwordsCount: number
+//   adsCount: number
+//   hanleChange(current: number): void
+// }
 
 // const AllSteps: FC<Props> = (props) => {
 //   return (
@@ -99,103 +91,135 @@ interface Props {
 //   )
 // }
 
-function useMouse() {
-  const handleMouseDown = (event: MouseEvent) => {
-    console.log(event)
+// function useMouse() {
+//   const handleMouseDown = (event: MouseEvent) => {
+//     console.log(event)
 
-    // if (mapRef.current) {
-    //   mapRef.current.style.transform = 'translate3d(0px, 0px, 0px)'
-    // }
+//     // if (mapRef.current) {
+//     //   mapRef.current.style.transform = 'translate3d(0px, 0px, 0px)'
+//     // }
 
-    console.log('mouse down')
-  }
+//     console.log('mouse down')
+//   }
 
-  const ref = useCallback((node: HTMLDivElement) => {
-    if (node) {
-      console.log('node +', node)
+//   const ref = useCallback((node: HTMLDivElement) => {
+//     if (node) {
+//       console.log('node +', node)
 
-      // return node
-      // node.addEventListener('mousedown', handleMouseDown)
-      // node.style.transform = 'translate3d(0px, 0px, 0px)'
-    }
-  }, [])
+//   // let i = false
+//   // const [test, ref] = useMouse()
+//   // const [test, setTest] = useState(false)
+//       // return node
+//       // node.addEventListener('mousedown', handleMouseDown)
+//       // node.style.transform = 'translate3d(0px, 0px, 0px)'
+//     }
+//   }, [])
 
-  return [null, ref]
-}
+//   return [null, ref]
+// }
 
 interface MapDrag {
   current: {
-    x: number
-    y: number
+    isDrag: boolean
     startDragX: number
     startDragY: number
-    isDrag: boolean
+    tx: number
+    ty: number
   }
 }
 
+interface MapConfig {
+  width: number
+  height: number
+}
+
+const mapConfig: MapConfig = {
+  width: 2321,
+  height: 2662
+}
+
 const Map = () => {
+  const windowDimensions = useWindowDimensions()
+
   const mapDrag: MapDrag = useRef({
-    x: -700,
-    y: -1000,
+    isDrag: false,
     startDragX: 0,
     startDragY: 0,
-    isDrag: false,
+    tx: -700,
+    ty: -1000
   })
-  // let i = false
-  // const [test, ref] = useMouse()
-  // const [test, setTest] = useState(false)
 
   const handleMouseEvent = useCallback((event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
+    const map = event.target as HTMLDivElement
 
     if (event.type === 'mousedown') {
+      map.classList.add(styles.mapDrag)
+
       mapDrag.current = {
         ...mapDrag.current,
         startDragX: event.clientX,
         startDragY: event.clientY,
-        isDrag: true,
+        isDrag: true
       }
-      console.log('mousedown !!!!!')
     }
 
-    if (event.type === 'mouseup' || event.type === 'mouseleave') {
-      const indentX = mapDrag.current.startDragX - event.clientX
-      const indentY = mapDrag.current.startDragY - event.clientY
-      const { x, y } = mapDrag.current
+    const indentX = mapDrag.current.startDragX - event.clientX
+    const indentY = mapDrag.current.startDragY - event.clientY
+    let tx = mapDrag.current.tx - indentX
+    let ty = mapDrag.current.ty - indentY
+
+    if (
+      (event.type === 'mouseup' || event.type === 'mouseleave') &&
+      mapDrag.current.isDrag
+    ) {
+      map.classList.remove(styles.mapDrag)
 
       mapDrag.current = {
         ...mapDrag.current,
-        x: x - indentX,
-        y: y - indentY,
-        isDrag: false,
+        tx,
+        ty,
+        isDrag: false
       }
     }
 
     if (event.type === 'mousemove' && mapDrag.current.isDrag) {
-      const indentX = mapDrag.current.startDragX - event.clientX
-      const indentY = mapDrag.current.startDragY - event.clientY
-      const { x, y } = mapDrag.current
+      const minX = mapConfig.width - windowDimensions.width
+      const minY = mapConfig.height - windowDimensions.height
 
-      const a = event.target as HTMLDivElement
-      console.log(a.style.transform)
+      if (tx > 0) {
+        tx = 0
+        mapDrag.current.tx = 0
+      }
 
-      a.style.transform = `translate3d(${x - indentX}px, ${y - indentY}px, 0px)`
+      if (ty > 0) {
+        ty = 0
+        mapDrag.current.ty = 0
+      }
 
-      console.log(
-        'MOVING !!! clientX',
-        event.clientX,
-        'current.x',
-        mapDrag.current.x,
-        'x',
-        x
-      )
+      if (tx <= -minX) {
+        tx = -minX
+        mapDrag.current.tx = -minX
+      }
+
+      if (ty <= -minY) {
+        ty = -minY
+        mapDrag.current.ty = -minY
+      }
+
+      map.style.transform = `translate3d(${tx}px, ${ty}px, 0px)`
     }
 
-    // console.log(event.type, isDrag.current)
-
-    // console.log('handleMouseMove')
-
     event.preventDefault()
+
+    // console.log(
+    //   'MOVING !!! clientX',
+    //   event.clientX,
+    //   'current.tx',
+    //   mapDrag.current.tx,
+    //   'tx',
+    //   tx
+    // )
   }, [])
 
   useEffect(() => {
