@@ -6,9 +6,10 @@ import {
   Route,
   useHistory
 } from 'react-router-dom'
-import { Ads } from 'pages/ads'
+import { Ads } from 'pages/adsPage'
 import styles from './app.module.sass'
 import 'antd/dist/antd.css'
+import ImportPage from 'pages/ImportPage'
 
 const { Step } = Steps
 
@@ -70,12 +71,12 @@ const AllSteps: FC<Props> = (props) => {
 }
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(0)
 
   return (
-    <Row gutter={[16, 24]}>
+    <Row gutter={[18, 8]}>
       <Router>
-        <Col className="gutter-row" span={6}>
+        <Col span={6}>
           <AllSteps
             current={currentStep}
             keywordsCount={0}
@@ -84,10 +85,13 @@ function App() {
             hanleChange={(current) => setCurrentStep(current)}
           />
         </Col>
-        <Col className="gutter-row" span={6}>
+        <Col span={18}>
           <Switch>
             <Route exact path="/">
               <div>Home</div>
+            </Route>
+            <Route exact path="/import">
+              <ImportPage />
             </Route>
             <Route path="/ads">
               <Ads />
