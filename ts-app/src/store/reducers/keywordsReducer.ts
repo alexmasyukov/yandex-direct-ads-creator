@@ -1,10 +1,15 @@
-import { Keyword, NormalizedKeywords } from 'store/types/keywords'
+import { Keyword } from 'store/types/keywords'
 import { normalize } from 'utils/normalize'
 import {
   KeywordsActionTypes,
   ADD_KEYWORDS,
   SET_NOT_USE_KEYWORD
-} from 'store/types/actions'
+} from 'store/types/keywords'
+
+interface NormalizedKeywords {
+  byId: Record<string, Keyword>
+  allIds: Array<string>
+}
 
 const initialState: NormalizedKeywords = {
   byId: {
@@ -20,6 +25,9 @@ export const KeywordsReducer = (
 ): NormalizedKeywords => {
   switch (action.type) {
     case ADD_KEYWORDS:
+      // for (let i = 0; i < 9999999999; i++) {
+      //   let x = (i * 444448933) / 21
+      // }
       return normalize<Keyword>(action.keywords)
 
     case SET_NOT_USE_KEYWORD:

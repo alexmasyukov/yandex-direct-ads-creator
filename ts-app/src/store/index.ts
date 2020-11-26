@@ -1,14 +1,20 @@
 import { combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { KeywordsReducer } from 'store/reducers/keywordsReducer'
+import { UIReducer } from 'store/reducers/uiReducer'
 
 const rootReducer = combineReducers({
-  keywords: KeywordsReducer
+  keywords: KeywordsReducer,
+  ui: UIReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>
 
 export const store = createStore(rootReducer, composeWithDevTools())
+
+const log = () => console.log('store', store.getState())
+log()
+store.subscribe(() => log())
 
 // const initialState = {
 // keywords: [], // normalized
@@ -94,6 +100,9 @@ export const store = createStore(rootReducer, composeWithDevTools())
  * https://github.com/jalbertsr/redux-store/blob/master/src/services/dataService.js
  * import fetch from 'isomorphic-fetch'
  *import { KeywordsReducer } from './reducers/keywordsReducer'
+import { ADD_KEYWORDS } from 'store/actionTypes/keywords'
+import { ADD_KEYWORDS } from 'store/types/actions'
+import { useState } from 'react'
 
  * productList: {
     products: [],

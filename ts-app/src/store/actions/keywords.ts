@@ -3,7 +3,7 @@ import {
   KeywordsActionTypes,
   ADD_KEYWORDS,
   SET_NOT_USE_KEYWORD
-} from 'store/types/actions'
+} from 'store/types/keywords'
 
 export const addKeywords = (keywords: Array<Keyword>): KeywordsActionTypes => ({
   type: ADD_KEYWORDS,

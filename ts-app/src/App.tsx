@@ -1,108 +1,55 @@
-import React, { FC, useState } from 'react'
-import { Steps, Row, Col } from 'antd'
+import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  useHistory
+  Route
 } from 'react-router-dom'
-import { Ads } from 'pages/adsPage'
+import ImportPage from 'pages/ImportPage'
+import { useSelector } from 'react-redux'
+import { selectKeywordsCount } from 'store/selectors/keywords'
+import { Steps } from 'components/steps'
+import { Layout } from 'antd'
 import styles from './app.module.sass'
 import 'antd/dist/antd.css'
-import ImportPage from 'pages/ImportPage'
 
-const { Step } = Steps
-
-interface Props {
-  current: number
-  keywordsCount: number
-  stopwordsCount: number
-  adsCount: number
-  hanleChange(current: number): void
-}
-
-const AllSteps: FC<Props> = (props) => {
-  let history = useHistory()
-
-  const go = (link: string) => () => history.push(link)
-
-  return (
-    <>
-      <div className={styles.logo}>
-        <h1>
-          Yandex <span>Ads Creator</span>
-        </h1>
-      </div>
-      <Steps
-        direction="vertical"
-        current={props.current}
-        percent={60}
-        onChange={props.hanleChange}
-      >
-        <Step
-          onClick={go('/import')}
-          title="Импорт ключей"
-          description={`Всего: ${props.keywordsCount}`}
-        />
-        <Step
-          onClick={go('/filter')}
-          // status="process"
-          title="Фильтрация ключей"
-          description={`Ключей: ${props.keywordsCount}, \nМинус-слов: ${props.stopwordsCount}`}
-        />
-        <Step
-          onClick={go('/ads')}
-          title="Генерация заголовков"
-          description="Настройте заголовки"
-        />
-        <Step
-          onClick={go('/ads')}
-          title="Генерация объявлений"
-          description="Настройте описания и дополнения"
-        />
-        <Step
-          onClick={go('/finish')}
-          title="Экспорт"
-          description={`Всего: ${props.adsCount}`}
-        />
-      </Steps>
-    </>
-  )
-}
+const { Sider } = Layout
 
 function App() {
   const [currentStep, setCurrentStep] = useState(0)
+  const keywordsCount = useSelector(selectKeywordsCount)
 
   return (
-    <Row gutter={[18, 8]}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Router>
-        <Col span={6}>
-          <AllSteps
+        <Sider width={300} className={styles.sider}>
+          <div className={styles.logo}>
+            <h1>
+              Yandex <span>Ads Creator</span>
+            </h1>
+          </div>
+          <Steps
             current={currentStep}
-            keywordsCount={0}
+            keywordsCount={keywordsCount}
             stopwordsCount={0}
             adsCount={0}
             hanleChange={(current) => setCurrentStep(current)}
           />
-        </Col>
-        <Col span={18}>
-          <Switch>
-            <Route exact path="/">
-              <div>Home</div>
-            </Route>
-            <Route exact path="/import">
-              <ImportPage />
-            </Route>
-            <Route path="/ads">
-              <Ads />
-            </Route>
-            <Route path="/dashboard">
-              <div>dashboard</div>
-            </Route>
-          </Switch>
-        </Col>
+        </Sider>
+
+        <Switch>
+          <Route exact path="/">
+            <div>Home</div>
+          </Route>
+          <Route exact path="/import">
+            <ImportPage />
+          </Route>
+          <Route path="/ads">{/* <Ads /> */}</Route>
+          <Route path="/dashboard">
+            <div>dashboard</div>
+          </Route>
+        </Switch>
       </Router>
-    </Row>
+    </Layout>
   )
 }
 
