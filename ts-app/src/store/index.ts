@@ -1,10 +1,12 @@
 import { combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { KeywordsReducer } from 'store/reducers/keywordsReducer'
-import { UIReducer } from 'store/reducers/uiReducer'
+import { keywordsReducer } from 'store/reducers/keywords'
+import { UIReducer } from 'store/reducers/ui'
+import { wordsReducer } from 'store/reducers/words'
 
 const rootReducer = combineReducers({
-  keywords: KeywordsReducer,
+  keywords: keywordsReducer,
+  words: wordsReducer,
   ui: UIReducer
 })
 

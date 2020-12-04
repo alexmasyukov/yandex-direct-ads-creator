@@ -1,21 +1,27 @@
 import { FC } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Steps as AntdSteps } from 'antd'
+import { selectStopwordsCount } from 'store/selectors/words'
+import {
+  selectKeywordsCount,
+  selectEnabledKeywordsCount
+} from 'store/selectors/keywords'
+
 const { Step } = AntdSteps
 
 interface Props {
   current: number
-  keywordsCount: number
-  stopwordsCount: number
-  adsCount: number
   hanleChange(current: number): void
 }
 
 export const Steps: FC<Props> = (props) => {
   let history = useHistory()
+  const keywordsCount = useSelector(selectKeywordsCount)
+  const enabledKeywordsCount = useSelector(selectEnabledKeywordsCount)
+  const stopwordsCount = useSelector(selectStopwordsCount)
 
   const go = (link: string) => () => history.push(link)
-
   return (
     <AntdSteps
       direction="vertical"
@@ -26,13 +32,13 @@ export const Steps: FC<Props> = (props) => {
       <Step
         onClick={go('/import')}
         title="Импорт ключей"
-        description={`Всего: ${props.keywordsCount}`}
+        description={`Всего: ${keywordsCount}`}
       />
       <Step
         onClick={go('/filter')}
         // status="process"
         title="Фильтрация ключей"
-        description={`Ключей: ${props.keywordsCount}, \nМинус-слов: ${props.stopwordsCount}`}
+        description={`Ключей: ${enabledKeywordsCount}, \nМинус-слов: ${stopwordsCount}`}
       />
       <Step
         onClick={go('/ads')}
@@ -47,7 +53,7 @@ export const Steps: FC<Props> = (props) => {
       <Step
         onClick={go('/finish')}
         title="Экспорт"
-        description={`Всего: ${props.adsCount}`}
+        description={`Объявлений: `}
       />
     </AntdSteps>
   )

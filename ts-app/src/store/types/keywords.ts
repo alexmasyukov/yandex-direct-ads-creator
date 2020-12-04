@@ -1,20 +1,20 @@
 export const ADD_KEYWORDS = 'ADD_KEYWORDS'
-export const SET_NOT_USE_KEYWORD = 'SET_NOT_USE_KEYWORD'
+export const SET_DISABLED_KEYWORD = 'SET_DISABLED_KEYWORD'
 
 export interface Keyword {
   id: string
-  keyword: string
-  use: boolean
+  text: string
+  disabled: boolean
 }
 
-export interface AddKeywordsAction {
+interface AddKeywordsAction {
   type: typeof ADD_KEYWORDS
   keywords: Array<Keyword>
 }
 
-export interface SetNotUseKeywordAction {
-  type: typeof SET_NOT_USE_KEYWORD
+interface SetDisabledKeywordAction {
+  type: typeof SET_DISABLED_KEYWORD
   id: string
 }
 
-export type KeywordsActionTypes = AddKeywordsAction | SetNotUseKeywordAction
+export type KeywordsActionTypes = AddKeywordsAction | SetDisabledKeywordAction

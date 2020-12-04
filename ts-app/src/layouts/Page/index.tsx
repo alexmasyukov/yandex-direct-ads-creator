@@ -25,7 +25,7 @@ const PageLayout = ({
       <Content style={{ margin: '0 16px' }}>
         <div
           className={styles.siteLayoutBackground}
-          style={{ padding: 20, minHeight: '100%' }}
+          style={{ padding: 20 }}
         >
           {children}
         </div>

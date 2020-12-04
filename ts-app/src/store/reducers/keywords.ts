@@ -3,7 +3,7 @@ import { normalize } from 'utils/normalize'
 import {
   KeywordsActionTypes,
   ADD_KEYWORDS,
-  SET_NOT_USE_KEYWORD
+  SET_DISABLED_KEYWORD
 } from 'store/types/keywords'
 
 interface NormalizedKeywords {
@@ -13,13 +13,14 @@ interface NormalizedKeywords {
 
 const initialState: NormalizedKeywords = {
   byId: {
-    k1: { id: 'k1', keyword: 'купить цветы', use: true },
-    k2: { id: 'k2', keyword: 'купить цветы sdf', use: true }
+    k1: { id: 'k1', text: 'купить цветы', disabled: false },
+    k2: { id: 'k2', text: 'купить цветы чита', disabled: false },
+    k3: { id: 'k3', text: 'заказать букет в чите', disabled: true }
   },
-  allIds: ['k1', 'k2']
+  allIds: ['k1', 'k2', 'k3']
 }
 
-export const KeywordsReducer = (
+export const keywordsReducer = (
   state = initialState,
   action: KeywordsActionTypes
 ): NormalizedKeywords => {
@@ -30,13 +31,13 @@ export const KeywordsReducer = (
       // }
       return normalize<Keyword>(action.keywords)
 
-    case SET_NOT_USE_KEYWORD:
+    case SET_DISABLED_KEYWORD:
       return {
         byId: {
           ...state.byId,
           [action.id]: {
             ...state.byId[action.id],
-            use: false
+            disabled: false
           }
         },
         allIds: [...state.allIds, action.id]
